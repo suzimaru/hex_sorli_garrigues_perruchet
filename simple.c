@@ -1,6 +1,6 @@
 
 
-
+//https://github.com/suzimaru/hex_sorli_garrigues_perruchet/tree/master
   /*gcc -o essai simple.c  `sdl-config --cflags --libs` -lSDL_image -lSDL_ttf*/
 
 
