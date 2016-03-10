@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 
 
     Uint32 initflags = SDL_INIT_VIDEO; //| SDL_DOUBLEBUF;  /* See documentation for details */
-    SDL_Surface *ecran, *texte1, *texte_menu_demarrer, *texte_auteur, *jouer, *charger, *quitter, *image_fond; // quelques surfaces
+    SDL_Surface *ecran, *board, *texte1, *texte_menu_demarrer, *texte_auteur, *jouer, *charger, *quitter, *image_fond; // quelques surfaces
     Dimensions fenetre; // main window
 
     fenetre.h = WINHI;  // en pixels
