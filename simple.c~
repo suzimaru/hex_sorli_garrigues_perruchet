@@ -35,8 +35,12 @@ int main(int argc, char *argv[])
 
 
     Uint32 initflags = SDL_INIT_VIDEO; //| SDL_DOUBLEBUF;  /* See documentation for details */
-    SDL_Surface *ecran, *board, *texte1, *texte_menu_demarrer, *texte_auteur, *jouer, *charger, *quitter, *image_fond; // quelques surfaces
+    SDL_Surface *ecran, *texte1, *texte_menu_demarrer, *texte_auteur, *jouer, *charger, *quitter, *image_fond; // quelques surfaces
     Dimensions fenetre; // main window
+
+	
+		SDL_Rect position_fond,posTexte1,posTexte_menu_demarrer,posTexte_auteur,posJouer, posCharger, posQuitter;
+
 
     fenetre.h = WINHI;  // en pixels
     fenetre.w = WINWI;   
@@ -48,8 +52,12 @@ int main(int argc, char *argv[])
     bool continuer; // pour la boucle principale des évènements
     SDL_Event event; // aussi
  
- 
- 
+
+
+
+
+
+
  
     /* Initialize the SDL library */
     if ( SDL_Init(initflags) < 0 )
@@ -71,69 +79,61 @@ int main(int argc, char *argv[])
 
 
 ////////////////////////////// AFFICHAGE DE L'ECRAN PRINCIPAL /////////////////////////////////
-		SDL_Rect position_fond;
-		
+	
+	// POSITIONS DES SURFACES/TEXTES
 		position_fond.x=0;
 		position_fond.y=0;
-
-    image_fond=IMG_Load("Images/image_fond.png");// couleur du fond de l'écran
-    SDL_BlitSurface(image_fond,NULL,ecran,&position_fond);
-
-    SDL_WM_SetCaption("Jeu de Hex", NULL); // titre de la fenêtre
-
-    TTF_Init();
     
-   
-    TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf",40);// police du menu
-    SDL_Color fontPurple = {0,51,102};// couleur du menu
-    texte1 = TTF_RenderText_Blended(fontMenu,"Jeu HEX",fontPurple);// texte du petit rectangle
-
-		// position du texte
-		SDL_Rect posTexte1;
     posTexte1.x = 125;
     posTexte1.y = 100;
 
-		// collage des nouvelles surfaces.
-    SDL_BlitSurface(texte1,NULL,ecran,&posTexte1); // celle la après pour qu'elle ne soit pas écrasée
-
-		TTF_SetFontStyle(fontMenu,TTF_STYLE_BOLD);
-		texte_menu_demarrer = TTF_RenderText_Blended(fontMenu,"MENU",fontPurple);
-		TTF_SetFontStyle(fontMenu,TTF_STYLE_NORMAL);
-
-		SDL_Rect posTexte_menu_demarrer;
 		posTexte_menu_demarrer.x=475;		
 		posTexte_menu_demarrer.y=115;
 		
-		SDL_BlitSurface(texte_menu_demarrer,NULL,ecran,&posTexte_menu_demarrer);
-		
-	
-//Création du bandeau des auteurs
- 		TTF_Font *fontAuteur = TTF_OpenFont("hacked/hacked.ttf",22);// police du menu
-
-		texte_auteur = TTF_RenderText_Blended(fontAuteur,"Garrigues, Perruchet, Sorli 2016",fontPurple);
-		
-		SDL_Rect posTexte_auteur;
 		posTexte_auteur.x=400;
 		posTexte_auteur.y=540;
-		SDL_BlitSurface(texte_auteur,NULL,ecran,&posTexte_auteur);
-
-//Création du menu, choix
-		jouer = TTF_RenderText_Blended(fontMenu,"Jouer",fontPurple);
-		charger = TTF_RenderText_Blended(fontMenu,"Charger",fontPurple);
-		quitter = TTF_RenderText_Blended(fontMenu,"Quitter",fontPurple);
-		
-		SDL_Rect posJouer, posCharger, posQuitter;
+			 
 		posJouer.x=435;
 		posJouer.y=195;
 		posCharger.x=435;
 		posCharger.y=275;
 		posQuitter.x=435;
 		posQuitter.y=355;
+		
+		
+    image_fond=IMG_Load("Images/image_fond.png");
+    
+		// voir pour l'icone de la fenêtre
+    SDL_WM_SetCaption("Jeu de Hex", NULL); // titre de la fenêtre
 
+    TTF_Init();
+    
+   //CREATION DU TEXTE 
+    TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf",40);// police du menu
+    SDL_Color fontPurple = {0,51,102};// couleur du menu
+    texte1 = TTF_RenderText_Blended(fontMenu,"Jeu HEX",fontPurple);// texte du petit rectangle
+
+		TTF_SetFontStyle(fontMenu,TTF_STYLE_BOLD);
+		texte_menu_demarrer = TTF_RenderText_Blended(fontMenu,"MENU",fontPurple);
+		TTF_SetFontStyle(fontMenu,TTF_STYLE_NORMAL);
+ 		
+ 		TTF_Font *fontAuteur = TTF_OpenFont("hacked/hacked.ttf",22);// police du menu
+		texte_auteur = TTF_RenderText_Blended(fontAuteur,"Garrigues, Perruchet, Sorli 2016",fontPurple);
+		
+		jouer = TTF_RenderText_Blended(fontMenu,"Jouer",fontPurple);
+		charger = TTF_RenderText_Blended(fontMenu,"Charger",fontPurple);
+		quitter = TTF_RenderText_Blended(fontMenu,"Quitter",fontPurple);
+		
+		
+	// BLIT
+	SDL_BlitSurface(image_fond,NULL,ecran,&position_fond); // coller l'image de fond
+	SDL_BlitSurface(texte1,NULL,ecran,&posTexte1); // celle la après pour qu'elle ne soit pas écrasée
+	SDL_BlitSurface(texte_menu_demarrer,NULL,ecran,&posTexte_menu_demarrer);
 	SDL_BlitSurface(jouer,NULL,ecran,&posJouer);
 	SDL_BlitSurface(charger,NULL,ecran,&posCharger);
 	SDL_BlitSurface(quitter,NULL,ecran,&posQuitter);
-
+	SDL_BlitSurface(texte_auteur,NULL,ecran,&posTexte_auteur);
+		
 
 //////////////////////////////////////// RECUPERATION DES COORDONNES DES CLICS //////////////////////////////////
 
@@ -164,8 +164,8 @@ int main(int argc, char *argv[])
     SDL_Flip(ecran); //maj des surfaces
  
  // boucle des évènements
-    continuer = true; // un furieux du c ferait plutôt une boucle infinie. Je préfère rester correct.
-    SDLKey key_pressed ;
+    continuer = true;
+    SDLKey key_pressed;
     while (continuer)
     {
         while ( SDL_PollEvent(&event))
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
             switch (event.type)
             {
                 case SDL_MOUSEMOTION:
-                    printf("Ça bouge\n"); // sans intérêt, c'est juste pour montrer
+                    printf("Ça bouge\n");
                     break;
                 case SDL_MOUSEBUTTONDOWN:
                     if (event.button.button == SDL_BUTTON_LEFT)
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
                         continuer = false;
                         break;
                     case SDLK_LEFT:
-                        printf("left +1\n"); // par exemple
+                        printf("left +1\n");
                         break;
                     case SDLK_RIGHT:
                         printf("right +1\n"); 
@@ -211,8 +211,8 @@ int main(int argc, char *argv[])
                     break;
             }
         }
+        
         // refresh screen
-        // mettre ici tous les blit utiles s'il y a des changements dans les surfaces, board, nouveaux pions
         SDL_Flip(ecran); //maj des surfaces pour affichage
     }
     //
