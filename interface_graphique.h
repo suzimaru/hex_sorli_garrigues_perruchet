@@ -32,4 +32,6 @@ typedef struct
 
 int clic_Valide (Clic c, int borneInfX, int borneSupX, int borneInfY, int borneSupY);
 void affichage (); 
+void clean (int menu);
+void affichage_menu_principal(int menu);
 #endif
