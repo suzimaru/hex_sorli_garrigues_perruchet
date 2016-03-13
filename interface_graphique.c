@@ -1,6 +1,6 @@
 #include "interface_graphique.h"
 
-int clic_Valide(Clic c, int borneInfX, int borneSupX, int borneInfY, int borneSupY)
+int clic_Valide(Clic c, int borneInfX, int borneInfY, int borneSupX, int borneSupY)
 {
 	return ((c.x>=borneInfX && c.x<=borneSupX) && (c.y>=borneInfY && c.y<=borneSupY));
 }
@@ -11,32 +11,32 @@ void affichage_menu (int menu)
 	{
 		case (1):
 		{
-			posTexte1.x = 125;
-  		posTexte1.y = 100;
+			posTexte1.x = 315;
+  		posTexte1.y = 60;
   
-  		posJouer.x=435;
-			posJouer.y=195;
+  		posJouer.x=340;
+			posJouer.y=250;
 	
-			posCharger.x=435;
-			posCharger.y=275;
+			posCharger.x=325;
+			posCharger.y=345;
 	
-			posQuitter.x=435;
-			posQuitter.y=355;
+			posQuitter.x=335;
+			posQuitter.y=445;
 	
 			position_fond.x=0;
 			position_fond.y=0;
 	
-			posTexte_menu_demarrer.x=475;		
-			posTexte_menu_demarrer.y=115;
+			posTexte_menu.x=340;		
+			posTexte_menu.y=150;
 		
-			posTexte_auteur.x=400;
+			posTexte_auteur.x=255;
 			posTexte_auteur.y=540;
 			 
 			TTF_Font *fontAuteur = TTF_OpenFont("hacked/hacked.ttf",22);// police du menu
 			TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf",40);// police du menu
 			
 		  SDL_Color fontPurple = {0,51,102};// couleur du menu
-		  texte1 = TTF_RenderText_Blended(fontMenu,"Jeu HEX",fontPurple);// texte du petit rectangle
+		  // texte du petit rectangle
 			
 			
 			
@@ -44,7 +44,8 @@ void affichage_menu (int menu)
 			
 			
 			TTF_SetFontStyle(fontMenu,TTF_STYLE_BOLD);
-			texte_menu_demarrer = TTF_RenderText_Blended(fontMenu,"MENU",fontPurple);
+			texte_menu = TTF_RenderText_Blended(fontMenu,"MENU",fontPurple);
+			texte1 = TTF_RenderText_Blended(fontMenu,"Jeu HEX",fontPurple);
 			TTF_SetFontStyle(fontMenu,TTF_STYLE_NORMAL);
 		
 		  jouer = TTF_RenderText_Blended(fontMenu,"Jouer",fontPurple);
@@ -57,13 +58,70 @@ void affichage_menu (int menu)
 			SDL_BlitSurface(charger,NULL,ecran,&posCharger);
 			SDL_BlitSurface(quitter,NULL,ecran,&posQuitter);
 			SDL_BlitSurface(texte1,NULL,ecran,&posTexte1); // celle la après pour qu'elle ne soit pas écrasée
-			SDL_BlitSurface(texte_menu_demarrer,NULL,ecran,&posTexte_menu_demarrer);
+			SDL_BlitSurface(texte_menu,NULL,ecran,&posTexte_menu);
 			SDL_BlitSurface(texte_auteur,NULL,ecran,&posTexte_auteur);
 		  SDL_Flip(ecran);
 		  break;
 		}
-		default:
-			break;
+		case (2):
+		{	
+			posQuitter.x=340;
+			posQuitter.y=435;
+	
+			position_fond.x=0;
+			position_fond.y=0;
+	
+			posTexte_menu.x=350;		
+			posTexte_menu.y=75;
+		
+			posTexte_auteur.x=255;
+			posTexte_auteur.y=540;
+			
+			posHvsH.x=260;
+			posHvsH.y=155;
+			 
+			posHvsIA1.x=285;
+			posHvsIA1.y=225;
+			
+			posHvsIA2.x=285;
+			posHvsIA2.y=295;
+			
+			posretour.x=340;
+			posretour.y=365;
+			
+			TTF_Font *fontAuteur = TTF_OpenFont("hacked/hacked.ttf",22);// police du menu
+			TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf",40);// police du menu
+			
+		  SDL_Color fontPurple = {0,51,102};// couleur du menu
+		  texte1 = TTF_RenderText_Blended(fontMenu,"Jeu HEX",fontPurple);// texte du petit rectangle
+			HvsH = TTF_RenderText_Blended(fontMenu,"Humain VS Humain",fontPurple);
+			HvsIA1 = TTF_RenderText_Blended(fontMenu,"Humain VS AI1",fontPurple);
+			HvsIA2 = TTF_RenderText_Blended(fontMenu,"Humain VS AI2",fontPurple);
+			retour = TTF_RenderText_Blended(fontMenu,"Retour",fontPurple);
+			
+			texte_auteur = TTF_RenderText_Blended(fontAuteur,"Garrigues, Perruchet, Sorli 2016",fontPurple);
+			
+			
+			TTF_SetFontStyle(fontMenu,TTF_STYLE_BOLD);
+			texte_menu = TTF_RenderText_Blended(fontMenu,"MENU",fontPurple);
+			TTF_SetFontStyle(fontMenu,TTF_STYLE_NORMAL);
+		
+		  jouer = TTF_RenderText_Blended(fontMenu,"Jouer",fontPurple);
+			charger = TTF_RenderText_Blended(fontMenu,"Charger",fontPurple);
+			quitter = TTF_RenderText_Blended(fontMenu,"Quitter",fontPurple);
+	
+	
+			SDL_BlitSurface(image_fond,NULL,ecran,&position_fond); // coller l'image de fond
+			SDL_BlitSurface(HvsH,NULL,ecran,&posHvsH);
+			SDL_BlitSurface(HvsIA1,NULL,ecran,&posHvsIA1);
+			SDL_BlitSurface(quitter,NULL,ecran,&posQuitter);
+			SDL_BlitSurface(HvsIA2,NULL,ecran,&posHvsIA2); // celle la après pour qu'elle ne soit pas écrasée
+			SDL_BlitSurface(texte_menu,NULL,ecran,&posTexte_menu);
+			SDL_BlitSurface(texte_auteur,NULL,ecran,&posTexte_auteur);
+			SDL_BlitSurface(retour,NULL,ecran,&posretour);
+		  SDL_Flip(ecran);
+		  break;
+		}
 	}
 }
 
@@ -72,13 +130,33 @@ void clean (int menu)
 	TTF_Font *fontAuteur = TTF_OpenFont("hacked/hacked.ttf",22);// police du menu
 	TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf",40);// police du menu
 
-	SDL_FreeSurface(ecran);
-  SDL_FreeSurface(texte1);
-  SDL_FreeSurface(texte_menu_demarrer);
-  SDL_FreeSurface(texte_auteur);
-  SDL_FreeSurface(jouer);
-  SDL_FreeSurface(charger);
-  SDL_FreeSurface(quitter);
+	switch (menu)
+	{
+		case (1):
+		{
+			SDL_FreeSurface(ecran);
+  		SDL_FreeSurface(texte1);
+  		SDL_FreeSurface(texte_menu);
+  		SDL_FreeSurface(texte_auteur);
+  		SDL_FreeSurface(jouer);
+  		SDL_FreeSurface(charger);
+  		SDL_FreeSurface(quitter);
+			break;
+		}
+		case (2):
+		{
+		  
+  		SDL_FreeSurface(HvsH);
+  		SDL_FreeSurface(texte_menu);
+  		SDL_FreeSurface(texte_auteur);
+  		SDL_FreeSurface(HvsIA1);
+  		SDL_FreeSurface(HvsIA2);
+  		SDL_FreeSurface(quitter);		
+  		SDL_FreeSurface(retour);
+SDL_FreeSurface(ecran);	
+  		break;
+		}
+}
   TTF_CloseFont(fontMenu);
   TTF_CloseFont(fontAuteur);
 }
@@ -161,11 +239,12 @@ void affichage ()
                      
                        //if ((clicX>=400  && clicX<=600) && (clicY>=180 && clicY<=250))
                        int jouer;
-                        if (jouer=clic_Valide(c,400,600,180,250))
+                        if (jouer=clic_Valide(c,330,240,450,295))
                         {
-                        	printf("jouer\n");
+                        	clean(1);
+                        	affichage_menu(2);
                         }
-                    }
+                    	}
                     break;
                 case SDL_KEYDOWN:
                     key_pressed = event.key.keysym.sym; // on récupère la touche
@@ -199,7 +278,8 @@ void affichage ()
 
 /////////////////////////////////////////// CLEAN //////////////////////////////////////////
    
-		clean(1);
+		clean(2);
+
     TTF_Quit();
     SDL_Quit();
   }
