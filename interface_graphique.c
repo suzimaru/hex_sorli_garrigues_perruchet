@@ -227,6 +227,8 @@ void clean(int menu) {
     SDL_FreeSurface(jouer);
     SDL_FreeSurface(charger);
     SDL_FreeSurface(quitter);
+    SDL_FreeSurface(image_fond);
+    SDL_FreeSurface(ecran);
 
     break;
   }
@@ -240,6 +242,7 @@ void clean(int menu) {
     SDL_FreeSurface(HvsIA2);
     SDL_FreeSurface(quitter);
     SDL_FreeSurface(retour);
+    SDL_FreeSurface(image_fond);
     SDL_FreeSurface(ecran);
 
     break;
@@ -249,6 +252,7 @@ void clean(int menu) {
     SDL_FreeSurface(niveau_deuxieme_IA);
     SDL_FreeSurface(niveau_premier_IA);
     SDL_FreeSurface(retour);
+    SDL_FreeSurface(image_fond);
     SDL_FreeSurface(ecran);
 
     break;
@@ -259,7 +263,6 @@ void clean(int menu) {
     SDL_FreeSurface(sauvegarder);
     SDL_FreeSurface(undo);
     SDL_FreeSurface(historique);
-
     
     SDL_FreeSurface(pion_bleu);
     nb_pions--;
@@ -267,6 +270,7 @@ void clean(int menu) {
     nb_pions--;
     
     SDL_FreeSurface(plateau);
+    SDL_FreeSurface(image_fond);
     SDL_FreeSurface(ecran);
   }
   }
