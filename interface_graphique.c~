@@ -4,7 +4,10 @@ int clic_Valide(Clic c, int borneInfX, int borneInfY, int borneSupX, int borneSu
 {
 	return ((c.x>=borneInfX && c.x<=borneSupX) && (c.y>=borneInfY && c.y<=borneSupY));
 }
-
+int souris_Dessus (Clic c, int menu, int borneInfX, int borneInfY, int borneSupX, borneSupY)
+{
+	
+}
 void affichage_menu (int menu)
 {
 	switch (menu)
@@ -146,7 +149,7 @@ void affichage_menu (int menu)
 			TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf",40);// police du menu
 			SDL_Color fontPurple = {0,51,102};// couleur du menu
 			
-			niveau = TTF_RenderText_Blended(fontMenu,"Quelle est le niveau des IA ?",fontPurple);
+			niveau = TTF_RenderText_Blended(fontMenu,"Quel est le niveau des IA ?",fontPurple);
 			niveau_premier_IA = TTF_RenderText_Blended(fontMenu,"Premiere IA :          1          2",fontPurple);
 			niveau_deuxieme_IA = TTF_RenderText_Blended(fontMenu,"Deuxieme IA :          1          2",fontPurple);
 			retour = TTF_RenderText_Blended(fontMenu,"Retour",fontPurple);
@@ -279,8 +282,12 @@ void affichage ()
       switch (event.type)
       {
         case SDL_MOUSEMOTION:
+        {
+        //METTER ICI LE SURLIGNAGE
+        	while ()
           printf("Ça bouge\n");
-          break;
+          
+        }  break;
         case SDL_MOUSEBUTTONDOWN:
         {
           if (event.button.button == SDL_BUTTON_LEFT)
@@ -300,7 +307,7 @@ void affichage ()
               	{
               		// Jouer
               		clean(menu);
-              		menu++;
+              		++menu;
                		affichage_menu(menu);
                		break;
               	}
@@ -334,37 +341,33 @@ void affichage ()
             		{
             			// RETOUR
             			clean(menu);
-            			menu--;
+            			--menu;
             			affichage_menu(menu);
-            			break;
             		}
             		else if (clic_Valide(c,325,80,450,120))
             		{
             			//IA VS IA 
             			printf("menu =%d\n",menu);
             			clean(menu);
-            			menu++;
+            			++menu;
             			affichage_menu(menu);
-            			break;
             		}
             		else if (clic_Valide(c,250,150,550,190))
             		{
             		// H VS H
             			printf("Humain vs Humain\n");
-            			break;
             		}
             		else if (clic_Valide(c,275,225,500,265))
             		{
             			// H VS IA1
             			printf("Humain vs IA1\n");
-            			break;
             		}
             		else if (clic_Valide(c,280,300,500,330))
             		{
             			// H VS IA2
             			printf("Humain vs IA2\n");
-            			break;
             		}
+            		break;
             	}
 /////////////////////////////////// TROISIEME MENU ///////////////////////////////////////
             	case (3):
@@ -373,7 +376,7 @@ void affichage ()
             		{
             			// RETOUR
             			clean(menu);
-            			menu--;
+            			--menu;
             			affichage_menu(menu);
             		}
             		break;
@@ -388,18 +391,6 @@ void affichage ()
             case SDLK_ESCAPE: /* Esc keypress quits the app... */
             	continuer = false;
             	break;
-            case SDLK_LEFT:
-              printf("left +1\n");
-              break;
-            case SDLK_RIGHT:
-              printf("right +1\n"); 
-              break;
-            case SDLK_UP:
-              printf("up +1\n");
-              break;
-            case SDLK_DOWN:
-              printf("down +1\n");
-              break;
           }
           break;
         case SDL_QUIT:

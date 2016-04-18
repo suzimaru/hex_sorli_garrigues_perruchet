@@ -28,13 +28,13 @@ typedef struct
 }	Clic;
 
 
-SDL_Surface *ecran, *texte1, *texte_menu, *texte_auteur, *jouer, *charger, *quitter, *image_fond, *HvsH, *HvsIA1, *HvsIA2, *IAvsIA ,*retour,  *niveau_premier_IA, *niveau_deuxieme_IA; 
+SDL_Surface *ecran, *texte1, *texte_menu, *texte_auteur, *jouer, *charger, *quitter, *image_fond, *HvsH, *HvsIA1, *HvsIA2, *IAvsIA ,*retour,  *niveau_premier_IA, *niveau_deuxieme_IA, *niveau; 
 
-SDL_Rect position_fond,posTexte1,posTexte_menu,posTexte_auteur,posJouer, posCharger, posQuitter, posHvsH, posHvsIA1, posHvsIA2, posIAvsIA ,posretour;
+SDL_Rect position_fond,posTexte1,posTexte_menu,posTexte_auteur,posJouer, posCharger, posQuitter, posHvsH, posHvsIA1, posHvsIA2, posIAvsIA ,posretour, posNiveau, pos1IA, pos2IA ;
 
 Dimensions fenetre; // main window
 
-
+//int souris_Dessus ()
 int clic_Valide (Clic c, int borneInfX, int borneInfY, int borneSupX, int borneSupY);
 void affichage (); 
 void clean (int menu);
