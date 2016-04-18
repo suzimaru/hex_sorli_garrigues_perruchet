@@ -178,8 +178,35 @@ void affichage_menu(int menu) {
     position_fond.y = 0;
 
     plateau = IMG_Load("Images/hex.png");
+    TTF_Font *fontMenu =
+        TTF_OpenFont("hacked/hacked.ttf", 40); // police du menu
+    SDL_Color fontPurple = {0, 51, 102};
+    quitter = TTF_RenderText_Blended(fontMenu, "Quitter", fontPurple);
+    sauvegarder = TTF_RenderText_Blended(fontMenu, "Sauvegarder", fontPurple);
+    undo = TTF_RenderText_Blended(fontMenu, "Undo", fontPurple);
+    historique = TTF_RenderText_Blended(fontMenu, "Historique", fontPurple);
+
     SDL_BlitSurface(image_fond, NULL, ecran, &position_fond);
     SDL_BlitSurface(plateau, NULL, ecran, &posPlateau);
+
+    posSauvegarder.x=545;
+    posSauvegarder.y=80;
+
+    posUndo.x=545;
+    posUndo.y=160;
+
+    posHistorique.x=545;
+    posHistorique.y=240;
+
+    posQuitter.x=545;
+    posQuitter.y=320;
+
+    SDL_BlitSurface(sauvegarder, NULL, ecran, &posSauvegarder);
+    SDL_BlitSurface(undo, NULL, ecran, &posUndo);
+    SDL_BlitSurface(historique, NULL, ecran, &posHistorique);
+    SDL_BlitSurface(quitter, NULL, ecran, &posQuitter);
+
+
     SDL_Flip(ecran);
     break;
   }
@@ -225,6 +252,22 @@ void clean(int menu) {
     SDL_FreeSurface(ecran);
 
     break;
+  }
+  case (4):
+  {
+    SDL_FreeSurface(quitter);
+    SDL_FreeSurface(sauvegarder);
+    SDL_FreeSurface(undo);
+    SDL_FreeSurface(historique);
+
+    
+    SDL_FreeSurface(pion_bleu);
+    nb_pions--;
+    SDL_FreeSurface(pion_rouge);
+    nb_pions--;
+    
+    SDL_FreeSurface(plateau);
+    SDL_FreeSurface(ecran);
   }
   }
   TTF_CloseFont(fontMenu);
@@ -278,8 +321,7 @@ void affichage() {
   SDL_WM_SetCaption("Jeu de Hex", NULL); // titre de la fenêtre
 
   TTF_Init();
-int nb_pions = 0;
-int nb_joueur = 0;
+
   /////////////////////////////////////// BOUCLE PRINCIPALE EVENT
   ///////////////////////////////////////////:
 
@@ -417,6 +459,31 @@ int nb_joueur = 0;
               }
               nb_joueur = (nb_joueur + 1) % 2;
               nb_pions++;
+            }
+            if (clic_Valide(c,540,315,660,360))
+            {
+              //QUITTER
+              continuer = false;
+              clean(menu);
+              break;
+            }
+            if (clic_Valide(c,540,75,765,120))
+            {
+              //SAUVEGARDER
+              printf("Sauvegarder\n");
+              break;
+            }
+            if (clic_Valide(c,540,155,645,200))
+            {
+              //UNDO
+              printf("Undo\n");
+              break;
+            }
+            if (clic_Valide(c,540,235,720,275))
+            {
+              //HISTORIQUE
+              printf("Historique\n");
+              break;
             }
           }
           }
