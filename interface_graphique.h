@@ -7,6 +7,9 @@
 #include <math.h>
 #include <stdbool.h>
 
+  // sudo apt-get install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-ttf2.0-dev
+
+
 #include <SDL/SDL.h>
 #include <SDL/SDL_keysym.h>
 #include <SDL/SDL_image.h>
@@ -30,9 +33,6 @@ SDL_Rect position_fond, posTexte1, posTexte_menu, posTexte_auteur, posJouer,
     posUndo, posHistorique, posSauvegarder;
 
 Dimensions fenetre; // main window
-
-int nb_pions = 0;
-int nb_joueur = 0;
 
 int souris_Dessus(Clic c, int menu, int borneInfX, int borneInfY, int borneSupX,
                   int borneSupY);

@@ -1,12 +1,16 @@
-#include "interface_graphique.h"
 
+#include "interface_graphique.h"
+int nb_joueur=0;
+int nb_pions=0;
 int clic_Valide(Clic c, int borneInfX, int borneInfY, int borneSupX,
                 int borneSupY) {
   return ((c.x >= borneInfX && c.x <= borneSupX) &&
           (c.y >= borneInfY && c.y <= borneSupY));
 }
-int souris_Dessus(Clic c, int menu, int borneInfX, int borneInfY, int borneSupX,
-                  int borneSupY) {}
+// int souris_Dessus(Clic c, int menu, int borneInfX, int borneInfY, int borneSupX,
+//                   int borneSupY) {}
+
+
 
 void affichage_menu(int menu) {
   switch (menu) {
@@ -52,8 +56,7 @@ void affichage_menu(int menu) {
     charger = TTF_RenderText_Blended(fontMenu, "Charger", fontPurple);
     quitter = TTF_RenderText_Blended(fontMenu, "Quitter", fontPurple);
 
-    SDL_BlitSurface(image_fond, NULL, ecran,
-                    &position_fond); // coller l'image de fond
+    SDL_BlitSurface(image_fond, NULL, ecran, &position_fond);
     SDL_BlitSurface(jouer, NULL, ecran, &posJouer);
     SDL_BlitSurface(charger, NULL, ecran, &posCharger);
     SDL_BlitSurface(quitter, NULL, ecran, &posQuitter);
@@ -62,7 +65,12 @@ void affichage_menu(int menu) {
         &posTexte1); // celle la après pour qu'elle ne soit pas écrasée
     SDL_BlitSurface(texte_menu, NULL, ecran, &posTexte_menu);
     SDL_BlitSurface(texte_auteur, NULL, ecran, &posTexte_auteur);
+
+
     SDL_Flip(ecran);
+
+      TTF_CloseFont(fontMenu);
+  TTF_CloseFont(fontAuteur);
     break;
   }
   case (2): {
@@ -118,19 +126,19 @@ void affichage_menu(int menu) {
     charger = TTF_RenderText_Blended(fontMenu, "Charger", fontPurple);
     quitter = TTF_RenderText_Blended(fontMenu, "Quitter", fontPurple);
 
-    SDL_BlitSurface(image_fond, NULL, ecran,
-                    &position_fond); // coller l'image de fond
+    SDL_BlitSurface(image_fond, NULL, ecran, &position_fond);
     SDL_BlitSurface(HvsH, NULL, ecran, &posHvsH);
     SDL_BlitSurface(IAvsIA, NULL, ecran, &posIAvsIA);
     SDL_BlitSurface(HvsIA1, NULL, ecran, &posHvsIA1);
     SDL_BlitSurface(quitter, NULL, ecran, &posQuitter);
-    SDL_BlitSurface(
-        HvsIA2, NULL, ecran,
-        &posHvsIA2); // celle la après pour qu'elle ne soit pas écrasée
+    SDL_BlitSurface(HvsIA2, NULL, ecran, &posHvsIA2);
     SDL_BlitSurface(texte_menu, NULL, ecran, &posTexte_menu);
     SDL_BlitSurface(texte_auteur, NULL, ecran, &posTexte_auteur);
     SDL_BlitSurface(retour, NULL, ecran, &posretour);
     SDL_Flip(ecran);
+
+      TTF_CloseFont(fontMenu);
+  TTF_CloseFont(fontAuteur);
     break;
   }
   case (3): {
@@ -147,16 +155,14 @@ void affichage_menu(int menu) {
     posretour.x = 165;
     posretour.y = 475;
 
-    TTF_Font *fontAuteur =
-        TTF_OpenFont("hacked/hacked.ttf", 22); // police du menu
+    
     TTF_Font *fontMenu =
         TTF_OpenFont("hacked/hacked.ttf", 40); // police du menu
     SDL_Color fontPurple = {0, 51, 102};       // couleur du menu
 
     niveau = TTF_RenderText_Blended(fontMenu, "Quel est le niveau des IA ?",
                                     fontPurple);
-    niveau_premier_IA = TTF_RenderText_Blended(
-        fontMenu, "Premiere IA :          1          2", fontPurple);
+    niveau_premier_IA = TTF_RenderText_Blended(fontMenu, "Premiere IA :          1          2", fontPurple);
     niveau_deuxieme_IA = TTF_RenderText_Blended(
         fontMenu, "Deuxieme IA :          1          2", fontPurple);
     retour = TTF_RenderText_Blended(fontMenu, "Retour", fontPurple);
@@ -167,6 +173,9 @@ void affichage_menu(int menu) {
     SDL_BlitSurface(niveau_deuxieme_IA, NULL, ecran, &pos2IA);
     SDL_BlitSurface(retour, NULL, ecran, &posretour);
     SDL_Flip(ecran);
+
+      TTF_CloseFont(fontMenu);
+
 
     break;
   }
@@ -208,27 +217,23 @@ void affichage_menu(int menu) {
 
 
     SDL_Flip(ecran);
+
+    TTF_CloseFont(fontMenu);
     break;
   }
   }
 }
 
 void clean(int menu) {
-  TTF_Font *fontAuteur =
-      TTF_OpenFont("hacked/hacked.ttf", 22);                  // police du menu
-  TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40); // police du menu
-
+  
   switch (menu) {
   case (1): {
-    SDL_FreeSurface(ecran);
     SDL_FreeSurface(texte1);
     SDL_FreeSurface(texte_menu);
     SDL_FreeSurface(texte_auteur);
     SDL_FreeSurface(jouer);
     SDL_FreeSurface(charger);
     SDL_FreeSurface(quitter);
-    SDL_FreeSurface(image_fond);
-    SDL_FreeSurface(ecran);
 
     break;
   }
@@ -242,8 +247,6 @@ void clean(int menu) {
     SDL_FreeSurface(HvsIA2);
     SDL_FreeSurface(quitter);
     SDL_FreeSurface(retour);
-    SDL_FreeSurface(image_fond);
-    SDL_FreeSurface(ecran);
 
     break;
   }
@@ -252,8 +255,6 @@ void clean(int menu) {
     SDL_FreeSurface(niveau_deuxieme_IA);
     SDL_FreeSurface(niveau_premier_IA);
     SDL_FreeSurface(retour);
-    SDL_FreeSurface(image_fond);
-    SDL_FreeSurface(ecran);
 
     break;
   }
@@ -270,12 +271,10 @@ void clean(int menu) {
     nb_pions--;
     
     SDL_FreeSurface(plateau);
-    SDL_FreeSurface(image_fond);
-    SDL_FreeSurface(ecran);
+    break;
   }
   }
-  TTF_CloseFont(fontMenu);
-  TTF_CloseFont(fontAuteur);
+    
 }
 
 void affichage() {
@@ -325,6 +324,9 @@ void affichage() {
   SDL_WM_SetCaption("Jeu de Hex", NULL); // titre de la fenêtre
 
   TTF_Init();
+  SDL_BlitSurface(image_fond, NULL, ecran, &position_fond);
+
+
 
   /////////////////////////////////////// BOUCLE PRINCIPALE EVENT
   ///////////////////////////////////////////:
@@ -358,7 +360,7 @@ void affichage() {
             if (clic_Valide(c, 330, 240, 450, 295)) {
               // Jouer
               clean(menu);
-              ++menu;
+              menu++;
               affichage_menu(menu);
               break;
             } else if (clic_Valide(c, 330, 450, 460, 485)) {
@@ -385,14 +387,15 @@ void affichage() {
             } else if (clic_Valide(c, 330, 360, 455, 400)) {
               // RETOUR
               clean(menu);
-              --menu;
+              menu--;
               affichage_menu(menu);
+              break;
             } else if (clic_Valide(c, 325, 80, 450, 120)) {
               // IA VS IA
-              printf("menu =%d\n", menu);
               clean(menu);
-              ++menu;
+              menu++;
               affichage_menu(menu);
+              break;
             } else if (clic_Valide(c, 250, 150, 550, 190)) {
               // H VS H
               printf("Humain vs Humain\n");
@@ -400,12 +403,15 @@ void affichage() {
               clean(menu);
               menu = menu + 2;
               affichage_menu(menu);
+              break;
             } else if (clic_Valide(c, 275, 225, 500, 265)) {
               // H VS IA1
               printf("Humain vs IA1\n");
+              break;
             } else if (clic_Valide(c, 280, 300, 500, 330)) {
               // H VS IA2
               printf("Humain vs IA2\n");
+              break;
             }
             break;
           }
@@ -499,6 +505,8 @@ void affichage() {
         case SDLK_ESCAPE: /* Esc keypress quits the app... */
           continuer = false;
           break;
+        default:
+          break;
         }
         break;
       case SDL_QUIT:
@@ -512,7 +520,7 @@ void affichage() {
 
   /////////////////////////////////////////// QUIT
   /////////////////////////////////////////////
-
+  SDL_FreeSurface(image_fond);
   TTF_Quit();
   SDL_Quit();
   }
