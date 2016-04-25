@@ -1,5 +1,5 @@
 CC=gcc
-OPT= `sdl-config --cflags --libs` -lSDL_image -lSDL_ttf
+OPT= `sdl-config --cflags --libs` -lSDL_image -lSDL_ttf -lm
 EXEC=essai
 
 all : $(EXEC)
