@@ -1,4 +1,4 @@
-
+#include "Sauvegarde_histo.h"
 #include "interface_graphique.h"
 int nb_joueur = 0;
 int nb_pions = 0;
@@ -680,6 +680,7 @@ void affichage() {
                 }
                 if (clic_Valide(c, 540, 75, 765, 120)) {
                   // SAUVEGARDER
+
                   printf("Sauvegarder\n");
                   break;
                 }
