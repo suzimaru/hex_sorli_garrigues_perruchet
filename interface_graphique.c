@@ -647,6 +647,10 @@ void affichage() {
                 break;
               }
               case (4): {
+
+
+                char total[4];
+
                 pion_bleu = IMG_Load("Images/pion_bleu.png");
                 pion_rouge = IMG_Load("Images/pion_rouge.png");
                 TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
