@@ -29,12 +29,12 @@ typedef struct { int x, y; } Clic;
 SDL_Surface *ecran, *texte1, *texte_menu, *texte_auteur, *jouer, *charger,
     *quitter, *image_fond, *HvsH, *HvsIA1, *HvsIA2, *IAvsIA, *retour,
     *niveau_premier_IA, *niveau_deuxieme_IA, *niveau, *PLATEAU, *pion_bleu, *pion_rouge,
-    *sauvegarder, *undo, *historique, *pion_annule, *arriere, *info_joueur, *info_coup, *cacheur, *info_pion ;
+    *sauvegarder, *undo, *enum_save, *pion_annule, *arriere, *info_joueur, *info_coup, *cacheur, *info_pion, *cacheur2 ;
 
 SDL_Rect position_fond, posTexte1, posTexte_menu, posTexte_auteur, posJouer,
     posCharger, posQuitter, posHvsH, posHvsIA1, posHvsIA2, posIAvsIA, posretour,
     posNiveau, pos1IA, pos2IA, posPlateau, pos_Pion, 
-    posUndo, posHistorique, posSauvegarder, pos_Arriere, pos_info_joueur, pos_info_coup, pos_cacheur, pos_info_pion;
+    posUndo, pos_enum_save, posSauvegarder, pos_Arriere, pos_info_joueur, pos_info_coup, pos_cacheur, pos_info_pion, pos_cacheur2;
 
 Dimensions fenetre; // main window
 
@@ -46,4 +46,5 @@ void affichage();
 void clean(int menu);
 void affichage_menu(int menu);
 void Jouer (int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col, int *annule);
+void Charge_plateau(int *nb_pions, Clic c,Case plateau[11][11]);
 #endif
