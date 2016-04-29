@@ -1,5 +1,4 @@
 #include "interface_graphique.h"
-#include "pile.h"
 
 //https://github.com/suzimaru/hex_sorli_garrigues_perruchet/tree/master
   /*gcc -o essai simple.c interface_graphique.c `sdl-config --cflags --libs` -lSDL_image -lSDL_ttf*/
@@ -14,7 +13,6 @@
 
 int main(int argc, char *argv[])
 {
-
 	affichage();
   return 0;
 }

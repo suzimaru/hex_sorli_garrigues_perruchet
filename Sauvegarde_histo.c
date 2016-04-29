@@ -2,6 +2,7 @@
 
 
 
+
 void afficher_plateau(int matrice[TAILLE_PLATEAU][TAILLE_PLATEAU],FILE *fichier){
 	int i,j;
 	for(i=0;i<TAILLE_PLATEAU;i++){
@@ -28,6 +29,7 @@ void sauvegarde(char name_save[],pile *historique){
 	int i=1;
 	int j;
 	int position_endgame,position_endhex,position_game,position_endboard,position_board;
+	struct cell_element elt;
 
 	//ouvrir un fichier
 
@@ -82,7 +84,8 @@ void sauvegarde(char name_save[],pile *historique){
 
 	while (!estVide(historique)){
 		fseek(fichier,position_game+12,SEEK_SET);
-		fprintf(fichier,"\\play %d %d %d \n",historique->elt.joueur,historique->elt.coordonnee_x,historique->elt.coordonnee_y);
+		elt=sommet(historique);
+		fprintf(fichier,"\\play %d %d %d \n",elt.joueur,elt.coordonnee_x,elt.coordonnee_y);
 		depiler(historique);
 		position_endgame++;
 		position_endhex++;		
@@ -103,7 +106,50 @@ void sauvegarde(char name_save[],pile *historique){
 
 
 
-// char name[6]="save_1";
-// pile histo;
-// sauvegarde(name,&histo);
+
+
+
+
+
+
+void chargement (pile *p,char name_save[]){
+	
+	char fingame[TAILLE_MAX]="";
+	
+	element *coup=(element*)malloc(sizeof(element));
+	
+
+	/*Ouvrir le fichier de sauvegarde*/
+	
+	char nom_fichier[20];
+	sprintf(nom_fichier,"%s.txt",name_save);
+	FILE* fichier=NULL;
+	fichier=fopen(nom_fichier,"r");
+
+	if (fichier ==	NULL){
+		printf("Impossible d'ouvrir ce fichier de sauvegarde\n");
+	}
+	
+
+	/*Parcourir le fichier pour trouver le debut de l'historique*/
+
+	fseek(fichier,264,SEEK_SET);
+	
+		
+	
+	/*tant que non end game*/
+	while (strcmp(fgets(fingame,TAILLE_MAX,fichier),"\\endgame")!=0){
+		
+		/*on enregistre chaque coup joué et on l'empile*/
+		fscanf(fichier,"\\play %d %d %d",&coup->joueur,&coup->coordonnee_x,&coup->coordonnee_y);
+		empiler_pile(p,*coup);	
+	
+	}
+	
+	/*on ferme le fichier*/
+
+	fclose(fichier);
+
+	
+}
 

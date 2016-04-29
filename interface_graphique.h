@@ -7,13 +7,17 @@
 #include <math.h>
 #include <stdbool.h>
 
-  // sudo apt-get install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-ttf2.0-dev
-
-
 #include <SDL/SDL.h>
 #include <SDL/SDL_keysym.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
+#include "jeux.h"
+#include "victoire.h"
+#include "pile.h"
+//#include "Sauvegarde_histo.h"
+
+  // sudo apt-get install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-ttf2.0-dev
+
 
 #define WINHI 600 // window height
 #define WINWI 800 // window width
@@ -24,7 +28,7 @@ typedef struct { int x, y; } Clic;
 
 SDL_Surface *ecran, *texte1, *texte_menu, *texte_auteur, *jouer, *charger,
     *quitter, *image_fond, *HvsH, *HvsIA1, *HvsIA2, *IAvsIA, *retour,
-    *niveau_premier_IA, *niveau_deuxieme_IA, *niveau, *plateau, *pion_bleu, *pion_rouge,
+    *niveau_premier_IA, *niveau_deuxieme_IA, *niveau, *PLATEAU, *pion_bleu, *pion_rouge,
     *sauvegarder, *undo, *historique, *pion_annule, *arriere, *info_joueur, *info_coup, *cacheur, *info_pion ;
 
 SDL_Rect position_fond, posTexte1, posTexte_menu, posTexte_auteur, posJouer,

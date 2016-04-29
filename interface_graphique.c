@@ -1,5 +1,5 @@
-#include "Sauvegarde_histo.h"
 #include "interface_graphique.h"
+
 int nb_joueur = 0;
 int nb_pions = 0;
 int clic_Valide(Clic c, int borneInfX, int borneInfY, int borneSupX,
@@ -11,6 +11,10 @@ int clic_Valide(Clic c, int borneInfX, int borneInfY, int borneSupX,
 // borneSupX,
 //                   int borneSupY) {}
 
+//"%d\n",estVide(p));
+// Case plateau[11][11];
+
+// init_plateau(plateau);
 void affichage_menu(int menu) {
   switch (menu) {
     case (1): {
@@ -182,7 +186,7 @@ void affichage_menu(int menu) {
       position_fond.x = 0;
       position_fond.y = 0;
 
-      plateau = IMG_Load("Images/hex.png");
+      PLATEAU = IMG_Load("Images/hex.png");
       TTF_Font *fontMenu =
           TTF_OpenFont("hacked/hacked.ttf", 40);  // police du menu
       SDL_Color fontPurple = {0, 51, 102};
@@ -202,7 +206,7 @@ void affichage_menu(int menu) {
 
       SDL_BlitSurface(arriere, NULL, ecran, &pos_Arriere);
 
-      SDL_BlitSurface(plateau, NULL, ecran, &posPlateau);
+      SDL_BlitSurface(PLATEAU, NULL, ecran, &posPlateau);
 
       posSauvegarder.x = 545;
       posSauvegarder.y = 80;
@@ -282,7 +286,7 @@ void clean(int menu) {
       SDL_FreeSurface(pion_bleu);
       SDL_FreeSurface(pion_rouge);
 
-      SDL_FreeSurface(plateau);
+      SDL_FreeSurface(PLATEAU);
       SDL_FreeSurface(arriere);
       break;
     }
@@ -303,10 +307,10 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
 
   // LIGNE 0
   if (clic_Valide(c, 30, 165, 361, 179)) {
-    lig = 0;
-    int col = floor((c.x - 32) / 30);
+    *lig = 0;
+    int colonne = (floor((c.x - 32) / 30));
     pos_Pion.y = 163;
-    pos_Pion.x = 30 * col + 30 + 7;
+    pos_Pion.x = 30 * colonne + 30 + 7;
     if (*nb_joueur == 0) {
       SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
       SDL_Flip(ecran);
@@ -317,14 +321,16 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     *nb_joueur = (*nb_joueur + 1) % 2;
     *nb_pions = *nb_pions + 1;
     *annule = 0;
+    *col = colonne;
   }
 
   // LIGNE 1
   if (clic_Valide(c, 45, 190, 374, 207)) {
     *lig = 1;
-    int col = floor((c.x - 47) / 30);
+    int colonne = floor((c.x - 47) / 30);
+
     pos_Pion.y = 188;
-    pos_Pion.x = 30 * col + 45 + 7;
+    pos_Pion.x = 30 * colonne + 45 + 7;
     if (*nb_joueur == 0) {
       SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
       SDL_Flip(ecran);
@@ -335,14 +341,15 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     *nb_joueur = (*nb_joueur + 1) % 2;
     *nb_pions = *nb_pions + 1;
     *annule = 0;
+    *col = colonne;
   }
 
   // LIGNE 2
   if (clic_Valide(c, 60, 215, 389, 233)) {
     *lig = 2;
-    int col = floor((c.x - 62) / 30);
+    int colonne = floor((c.x - 62) / 30);
     pos_Pion.y = 213;
-    pos_Pion.x = 30 * col + 60 + 7;
+    pos_Pion.x = 30 * colonne + 60 + 7;
     if (*nb_joueur == 0) {
       SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
       SDL_Flip(ecran);
@@ -353,14 +360,15 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     *nb_joueur = (*nb_joueur + 1) % 2;
     *nb_pions = *nb_pions + 1;
     *annule = 0;
+    *col = colonne;
   }
 
   // LIGNE 3
   if (clic_Valide(c, 75, 240, 406, 260)) {
     *lig = 3;
-    int col = floor((c.x - 77) / 30);
+    int colonne = floor((c.x - 77) / 30);
     pos_Pion.y = 238;
-    pos_Pion.x = 30 * col + 76 + 7;
+    pos_Pion.x = 30 * colonne + 76 + 7;
     if (*nb_joueur == 0) {
       SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
       SDL_Flip(ecran);
@@ -371,14 +379,15 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     *nb_joueur = (*nb_joueur + 1) % 2;
     *nb_pions = *nb_pions + 1;
     *annule = 0;
+    *col = colonne;
   }
 
   // LIGNE 4
   if (clic_Valide(c, 90, 265, 425, 286)) {
     *lig = 4;
-    int col = floor((c.x - 92) / 30);
+    int colonne = floor((c.x - 92) / 30);
     pos_Pion.y = 263;
-    pos_Pion.x = 30 * col + 90 + 7;
+    pos_Pion.x = 30 * colonne + 90 + 7;
     if (*nb_joueur == 0) {
       SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
       SDL_Flip(ecran);
@@ -389,14 +398,15 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     *nb_joueur = (*nb_joueur + 1) % 2;
     *nb_pions = *nb_pions + 1;
     *annule = 0;
+    *col = colonne;
   }
 
   // LIGNE 5
   if (clic_Valide(c, 105, 290, 435, 310)) {
     *lig = 5;
-    int col = floor((c.x - 107) / 30);
+    int colonne = floor((c.x - 107) / 30);
     pos_Pion.y = 288;
-    pos_Pion.x = 30 * col + 105 + 7;
+    pos_Pion.x = 30 * colonne + 105 + 7;
     if (*nb_joueur == 0) {
       SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
       SDL_Flip(ecran);
@@ -407,14 +417,15 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     *nb_joueur = (*nb_joueur + 1) % 2;
     *nb_pions = *nb_pions + 1;
     *annule = 0;
+    *col = colonne;
   }
 
   // LIGNE 6
   if (clic_Valide(c, 120, 315, 451, 333)) {
     *lig = 6;
-    int col = floor((c.x - 122) / 30);
+    int colonne = floor((c.x - 122) / 30);
     pos_Pion.y = 313;
-    pos_Pion.x = 30 * col + 120 + 7;
+    pos_Pion.x = 30 * colonne + 120 + 7;
     if (*nb_joueur == 0) {
       SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
       SDL_Flip(ecran);
@@ -425,14 +436,15 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     *nb_joueur = (*nb_joueur + 1) % 2;
     *nb_pions = *nb_pions + 1;
     *annule = 0;
+    *col = colonne;
   }
 
   // LIGNE 7
   if (clic_Valide(c, 135, 340, 466, 360)) {
     *lig = 7;
-    int col = floor((c.x - 137) / 30);
+    int colonne = floor((c.x - 137) / 30);
     pos_Pion.y = 338;
-    pos_Pion.x = 30 * col + 135 + 7;
+    pos_Pion.x = 30 * colonne + 135 + 7;
     if (*nb_joueur == 0) {
       SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
       SDL_Flip(ecran);
@@ -443,14 +455,15 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     *nb_joueur = (*nb_joueur + 1) % 2;
     *nb_pions = *nb_pions + 1;
     *annule = 0;
+    *col = colonne;
   }
 
   // LIGNE 8
   if (clic_Valide(c, 150, 365, 481, 385)) {
     *lig = 8;
-    int col = floor((c.x - 152) / 30);
+    int colonne = floor((c.x - 152) / 30);
     pos_Pion.y = 363;
-    pos_Pion.x = 30 * col + 150 + 7;
+    pos_Pion.x = 30 * colonne + 150 + 7;
     if (*nb_joueur == 0) {
       SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
       SDL_Flip(ecran);
@@ -461,14 +474,15 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     *nb_joueur = (*nb_joueur + 1) % 2;
     *nb_pions = *nb_pions + 1;
     *annule = 0;
+    *col = colonne;
   }
 
   // LIGNE 9
   if (clic_Valide(c, 165, 390, 496, 410)) {
     *lig = 9;
-    int col = floor((c.x - 167) / 30);
+    int colonne = floor((c.x - 167) / 30);
     pos_Pion.y = 388;
-    pos_Pion.x = 30 * col + 165 + 7;
+    pos_Pion.x = 30 * colonne + 165 + 7;
     if (*nb_joueur == 0) {
       SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
       SDL_Flip(ecran);
@@ -479,14 +493,15 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     *nb_joueur = (*nb_joueur + 1) % 2;
     *nb_pions = *nb_pions + 1;
     *annule = 0;
+    *col = colonne;
   }
 
   // LIGNE 10
   if (clic_Valide(c, 180, 415, 511, 435)) {
     *lig = 10;
-    int col = floor((c.x - 182) / 30);
+    int colonne = floor((c.x - 182) / 30);
     pos_Pion.y = 413;
-    pos_Pion.x = 30 * col + 180 + 7;
+    pos_Pion.x = 30 * colonne + 180 + 7;
     if (*nb_joueur == 0) {
       SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
       SDL_Flip(ecran);
@@ -497,6 +512,7 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     *nb_joueur = (*nb_joueur + 1) % 2;
     *nb_pions = *nb_pions + 1;
     *annule = 0;
+    *col = colonne;
   }
 
   SDL_BlitSurface(cacheur, NULL, ecran, &pos_cacheur);
@@ -558,6 +574,9 @@ void affichage() {
   /////////////////////////////////////// BOUCLE PRINCIPALE EVENT
   ///////////////////////////////////////////:
   int annule = 0;
+  pile *p = init();
+  Case plateau[11][11];
+  init_plateau(plateau);
   continuer = true;
   SDLKey key_pressed;
   affichage_menu(1);
@@ -647,9 +666,7 @@ void affichage() {
                 break;
               }
               case (4): {
-
-
-                char total[4];
+                // char total[4];
 
                 pion_bleu = IMG_Load("Images/pion_bleu.png");
                 pion_rouge = IMG_Load("Images/pion_rouge.png");
@@ -669,9 +686,17 @@ void affichage() {
 
                 SDL_BlitSurface(info_joueur, NULL, ecran, &pos_info_joueur);
                 SDL_Flip(ecran);
+                if (clic_Valide(c, 25, 160, 520, 440)) {
+                  Jouer(&nb_joueur, &nb_pions, c, &lig, &col, &annule);
+                  printf("lig %d col %d \n", lig, col);
+                  // jeux(int X,int Y, int joueur ,pile * p,PLATEAU
 
-                Jouer(&nb_joueur, &nb_pions, c, &lig, &col, &annule);
-
+                  if (jeux(lig, col, nb_joueur, p, plateau)) {
+                    printf("continuer\n");
+                  } else {
+                    printf("fin\n");
+                  }
+                }
                 if (clic_Valide(c, 540, 315, 660, 360)) {
                   // QUITTER
                   continuer = false;

@@ -10,14 +10,11 @@ typedef struct cell_element{
     int coordonnee_x;
     int coordonnee_y;
     int joueur;
+    int borne;
 }element;
 
-
-
-
-
 typedef struct Cell_p {
-    struct cell_element elt;
+    element elt;
     struct Cell_p *next;
 } pile;
 
@@ -25,8 +22,8 @@ typedef struct Cell_p {
 
 pile *init();
 int estVide(pile *p);
-struct cell_element sommet (pile *p);
-void empiler_pile(pile *p,struct cell_element New_number);
+element sommet (pile *p);
+void empiler_pile(pile **p,element New_number);
 pile *depiler(pile *p);
 
 

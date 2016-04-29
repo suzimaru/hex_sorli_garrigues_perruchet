@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+
 #include "pile.h"
 
 
@@ -13,21 +12,25 @@ int estVide(pile *p){
 
 
 
-void empiler_pile(pile *p,struct cell_element New_number){
+void empiler_pile(pile **p,element New_number){
     if (p==NULL) {
-        p=(pile*)malloc(sizeof(struct Cell_p));
-        p->elt=New_number;
-        p->next=NULL;
+        *p=(pile*)malloc(sizeof(pile));
+        (*p)->elt=New_number;
+        (*p)->next=NULL;
+        printf("YO ! \n");
+  printf("elt  %d %d %d \n",(*p)->elt.coordonnee_x,(*p)->elt.coordonnee_y,(*p)->elt.borne );
     }else{
-        pile *tmp=(pile*)malloc(sizeof(struct Cell_p));
-        tmp->next=p;
+        pile *tmp=(pile*)malloc(sizeof(pile));
+        tmp->next=*p;
         tmp->elt=New_number;
-        p=tmp;
+        *p=tmp;
     }
+      printf("elt2  %d %d %d \n",(*p)->elt.coordonnee_x,(*p)->elt.coordonnee_y,(*p)->elt.borne );
+
 }
 
 
-struct cell_element sommet (pile *p){
+element sommet (pile *p){
     return p->elt;
 }
 
@@ -41,5 +44,3 @@ pile *depiler(pile *p){
     }
     return p;
 }
-
-
