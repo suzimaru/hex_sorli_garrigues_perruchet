@@ -409,7 +409,7 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
   }
 
   // LIGNE 4
-  if (clic_Valide(c, 90, 265, 425, 286)) {
+  if (clic_Valide(c, 90, 265, 421, 286)) {
     *lig = 4;
     *col = floor((c.x - 92) / 30);
     if (plateau[*lig][*col].joueur == -1) {
