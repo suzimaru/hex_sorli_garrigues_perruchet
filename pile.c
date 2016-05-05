@@ -1,46 +1,81 @@
-
+#include <stdio.h>
+#include <stdbool.h>
 #include "pile.h"
+#include <stdlib.h>
 
-
-pile *init(){
-   return NULL;
+void init (pile *p)
+{
+  p->top=NULL;
 }
 
-int estVide(pile *p){
-    return p==NULL;
+bool estVide (pile *p)
+{
+  return (p->top== NULL);
 }
 
 
+bool pile_Pleine (pile *p)
+{
+  return false;
+}
 
-void empiler_pile(pile **p,element New_number){
-    if (p==NULL) {
-        *p=(pile*)malloc(sizeof(pile));
-        (*p)->elt=New_number;
-        (*p)->next=NULL;
-        printf("YO ! \n");
-  printf("elt  %d %d %d \n",(*p)->elt.coordonnee_x,(*p)->elt.coordonnee_y,(*p)->elt.borne );
-    }else{
-        pile *tmp=(pile*)malloc(sizeof(pile));
-        tmp->next=*p;
-        tmp->elt=New_number;
-        *p=tmp;
+void affiche_pile (pile *p)
+{
+  if (!estVide(p))
+  {
+    Cell *c=p->top;
+    while (c!=NULL)
+    {
+     
+      c=c->next;
     }
-      printf("elt2  %d %d %d \n",(*p)->elt.coordonnee_x,(*p)->elt.coordonnee_y,(*p)->elt.borne );
+  }
+}
 
+void empiler_pile (pile *p, element e)
+{
+  if (!pile_Pleine(p))
+  { 
+    Cell *c;
+    c=(Cell*)malloc(sizeof(c));
+    c->elt=e;
+    c->next=p->top;
+    p->top=c;
+  }
+  printf("empiler++\n");
+}
+
+element depiler(pile *p)
+
+{ 
+  element e_depile;
+  e_depile.coordonnee_x=0;
+  e_depile.coordonnee_y=0;
+  e_depile.joueur=-1;
+  e_depile.borne=0;
+  if (!estVide(p))
+  {
+    Cell *cellule_depilee=p->top; 
+    e_depile=cellule_depilee->elt;
+    p->top=cellule_depilee->next;
+    free(cellule_depilee);
+  }
+    return e_depile;
 }
 
 
-element sommet (pile *p){
-    return p->elt;
+element sommet (pile *p)
+{
+  element som;
+  som.coordonnee_x=0;
+  som.coordonnee_y=0;
+  som.joueur=-1;
+  som.borne=0;
+  if (!estVide(p))
+  {
+    Cell *c=p->top;
+    som=c->elt;
+  }
+  return som;
 }
 
-
-pile *depiler(pile *p){
-    pile *tmp;
-    if (!estVide(p)) {
-        tmp=p;
-        p=p->next;
-        free(tmp);
-    }
-    return p;
-}

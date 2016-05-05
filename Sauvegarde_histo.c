@@ -23,20 +23,23 @@ void afficher_plateau(int matrice[TAILLE_PLATEAU][TAILLE_PLATEAU],FILE *fichier)
 }
 
 
-void sauvegarde(char name_save[],pile *historique){
+void sauvegarde_fichier(char name_save[],pile *historique){
 
 	int plateau[TAILLE_PLATEAU][TAILLE_PLATEAU];
 	int i=1;
 	int j;
-	int position_endgame,position_endhex,position_game,position_endboard,position_board;
+	pile *paux=historique;
+	Cell *psave=historique->top;
+	int position_endgame=291,position_endhex=301,position_game,position_endboard,position_board;
 	struct cell_element elt;
+
 
 	//ouvrir un fichier
 
 	char nom_fichier[20];
-	sprintf(nom_fichier,"%s.txt",name_save);
+	sprintf(nom_fichier,"save/%s.txt",name_save);
 	FILE* fichier=NULL;
-	fichier=fopen(nom_fichier,"w+");
+	fichier=fopen(nom_fichier,"w");
 
 	if (fichier ==	NULL){
 		printf("Impossible d'ouvrir ce fichier de sauvegarde\n");
@@ -46,21 +49,15 @@ void sauvegarde(char name_save[],pile *historique){
 	while(i<TAILLE_MAX_FICHIER){
 		if(i==1){
 			fprintf(fichier,"\\Hex\n");	//fichier commence par le mot \hex
-		}else if(i==4){
+		}else if(i==3){
 			fprintf(fichier,"	\\Board\n");//description du plateau de jeu par le mot \board
 			position_board=i;
-		}else if(i==260){
+		}else if(i==257){
 			fprintf(fichier,"	\\Endboard\n");//fin de la description du plateau de jeu \endboard
 			position_endboard=i;
-		}else if(i==263){
+		}else if(i==259){
 			fprintf(fichier,"	\\Game\n");//historique de jeu dans la section \game
 			position_game=i;
-		}else if(i==265){
-			fprintf(fichier,"	\\Endgame\n");//on fini la section historique avec un \endgame
-			position_endgame=i;
-		}else if(i==267){
-			fprintf(fichier,"\\Endhex\n");//fichier clos \endhex
-			position_endhex=i;
 		}else{
 			fprintf(fichier,"\n");
 		}
@@ -68,35 +65,46 @@ void sauvegarde(char name_save[],pile *historique){
 	}
 
 
-	fseek(fichier,position_board+12,SEEK_SET);
 	
 
 	/* initialisation du plateau */
 	
 	for(i=0;i<TAILLE_PLATEAU;i++){
 		for(j=0;j<TAILLE_PLATEAU;j++){
-			plateau[i][j]=0;
+			plateau[i][j]=-1;
 		}
 	}
 	
-	afficher_plateau(plateau,fichier);
 	
+	fseek(fichier,position_game+27,SEEK_SET);
 
-	while (!estVide(historique)){
-		fseek(fichier,position_game+12,SEEK_SET);
+	/*while (!estVide(historique)){
+		
 		elt=sommet(historique);
-		fprintf(fichier,"\\play %d %d %d \n",elt.joueur,elt.coordonnee_x,elt.coordonnee_y);
+		plateau[elt.coordonnee_x][elt.coordonnee_y]=elt.joueur;
+		fprintf(fichier,"\\play %d %d %d \n",elt.joueur,elt.coordonnee_x+1,elt.coordonnee_y+1);
 		depiler(historique);
-		position_endgame++;
-		position_endhex++;		
+		position_endgame += 14;
+		position_endhex += 14;		
+	}*/
+
+	while (paux->top!=NULL){
+		
+		elt=paux->top->elt;
+		plateau[elt.coordonnee_x][elt.coordonnee_y]=elt.joueur;
+		fprintf(fichier,"\\play %d %d %d \n",elt.joueur,elt.coordonnee_x+1,elt.coordonnee_y+1);
+		paux->top=paux->top->next;
+		position_endgame += 14;
+		position_endhex += 14;		
 	}
-	
-	fseek(fichier,position_endgame,SEEK_SET);
 	fprintf(fichier,"	\\Endgame\n");
-
-
-	fseek(fichier,position_endhex,SEEK_SET);
 	fprintf(fichier,"\\Endhex\n");
+
+	historique->top=psave;
+	
+
+	fseek(fichier,position_board+11,SEEK_SET);
+	afficher_plateau(plateau,fichier);
 	
 
 	//fermer le fichier
@@ -112,17 +120,14 @@ void sauvegarde(char name_save[],pile *historique){
 
 
 
-void chargement (pile *p,char name_save[]){
+void chargement(int *joueur,int plateau[TAILLE_PLATEAU][TAILLE_PLATEAU],char name_save[],int *x,int *y){
 	
-	char fingame[TAILLE_MAX]="";
-	
-	element *coup=(element*)malloc(sizeof(element));
-	
-
+	int i,j;
+	char pion;
 	/*Ouvrir le fichier de sauvegarde*/
 	
 	char nom_fichier[20];
-	sprintf(nom_fichier,"%s.txt",name_save);
+	sprintf(nom_fichier,"save/%s.txt",name_save);
 	FILE* fichier=NULL;
 	fichier=fopen(nom_fichier,"r");
 
@@ -133,21 +138,36 @@ void chargement (pile *p,char name_save[]){
 
 	/*Parcourir le fichier pour trouver le debut de l'historique*/
 
-	fseek(fichier,264,SEEK_SET);
-	
+	fseek(fichier,266,SEEK_SET);
+	fscanf(fichier,"\\play %d",joueur);
 		
 	
-	/*tant que non end game*/
-	while (strcmp(fgets(fingame,TAILLE_MAX,fichier),"\\endgame")!=0){
-		
-		/*on enregistre chaque coup joué et on l'empile*/
-		fscanf(fichier,"\\play %d %d %d",&coup->joueur,&coup->coordonnee_x,&coup->coordonnee_y);
-		empiler_pile(p,*coup);	
-	
-	}
-	
-	/*on ferme le fichier*/
+	fseek(fichier,14,SEEK_SET);
 
+	for(i=0;i<TAILLE_PLATEAU;i++){
+		for(j=0;j<TAILLE_PLATEAU;j++){
+			fscanf(fichier,"%c ",&pion);
+			if(pion=='B'){
+				plateau[i][j]=0;
+			}else if(pion=='R'){
+				plateau[i][j]=1;
+
+			}else{
+				plateau[i][j]=-1;
+			}
+		}
+	}
+
+// Il faudra return le dernier pion joué (ligne, colonne, numero du joueur)
+// si vous testez avec la sauvegarde 2 (j'ai rentré les coordonnées à la main pour le dernier coup jouer) ça affiche les
+// bonnes infos 
+// quand on charge ça remplit pas la pile donc quand on sauvegarde une partie qu'on a changé aupréalablement, y a que les données 
+// qui ont été rentrées APRÈS la sauvegarde qui sont sauvegardées du coup ça marche pas vraiment faudrait que tu rajoutes une pile 
+// dans ta fonction chargement je pense
+
+*joueur=0;
+*x=0;
+*y=0;
 	fclose(fichier);
 
 	

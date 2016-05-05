@@ -233,6 +233,9 @@ void affichage_menu(int menu) {
       pos_info_joueur.x = 15;
       pos_info_joueur.y = 75;
 
+      pos_info_coup.x = 15;
+      pos_info_coup.y = 475;
+
       SDL_BlitSurface(info_joueur, NULL, ecran, &pos_info_joueur);
       SDL_BlitSurface(sauvegarder, NULL, ecran, &posSauvegarder);
       SDL_BlitSurface(undo, NULL, ecran, &posUndo);
@@ -241,6 +244,33 @@ void affichage_menu(int menu) {
       SDL_Flip(ecran);
 
       TTF_CloseFont(fontMenu);
+      break;
+    }
+    case (5): {
+      SDL_BlitSurface(image_fond, NULL, ecran, &position_fond);
+      TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
+      SDL_Color fontPurple = {0, 51, 102};
+
+      posNiveau.x = 145;
+      posNiveau.y = 85;
+      niveau = TTF_RenderText_Blended(fontMenu, "Selectionnez une sauvegarde",
+                                      fontPurple);
+      SDL_BlitSurface(niveau, NULL, ecran, &posNiveau);
+
+      enum_save = TTF_RenderText_Blended(
+          fontMenu, "Save 1         Save 2         Save 3", fontPurple);
+      pos_enum_save.x = 140;
+      pos_enum_save.y = 285;
+
+      posretour.x = 165;
+      posretour.y = 475;
+      retour = TTF_RenderText_Blended(fontMenu, "Retour", fontPurple);
+      SDL_BlitSurface(retour, NULL, ecran, &posretour);
+
+      SDL_BlitSurface(enum_save, NULL, ecran, &pos_enum_save);
+      SDL_Flip(ecran);
+      TTF_CloseFont(fontMenu);
+
       break;
     }
   }
@@ -295,6 +325,12 @@ void clean(int menu) {
       SDL_FreeSurface(enum_save);
       SDL_FreeSurface(pion_annule);
 
+      break;
+    }
+    case (5): {
+      SDL_FreeSurface(retour);
+      SDL_FreeSurface(niveau);
+      // SDL_FreeSurface(enum_save);
       break;
     }
   }
@@ -600,12 +636,14 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
 
       // echange des joueurs car on l'incrémente avant
       if (*nb_joueur == 1) {
-        sprintf(char_coup, "Le joueur bleu a joue en %d,%d", *lig, *col);
+        sprintf(char_coup, "Le joueur bleu a joue en %d,%d", (*lig) + 1,
+                (*col) + 1);
         printf("%s\n", char_coup);
         info_coup = TTF_RenderText_Blended(fontMenu, char_coup, fontPurple);
         SDL_BlitSurface(info_coup, NULL, ecran, &pos_info_coup);
       } else if (*nb_joueur == 0) {
-        sprintf(char_coup, "Le joueur rouge a joue en %d,%d", *lig, *col);
+        sprintf(char_coup, "Le joueur rouge a joue en %d,%d", (*lig) + 1,
+                (*col) + 1);
         printf("%s\n", char_coup);
         info_coup = TTF_RenderText_Blended(fontMenu, char_coup, fontPurple);
         SDL_BlitSurface(info_coup, NULL, ecran, &pos_info_coup);
@@ -623,36 +661,36 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
   }
 }
 
-void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11]) {
+void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11], int lig,
+                    int col, int *nb_joueur) {
+  TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
+  SDL_Color fontPurple = {0, 51, 102};
   int i, j;
   pion_bleu = IMG_Load("Images/pion_bleu.png");
   pion_rouge = IMG_Load("Images/pion_rouge.png");
   for (i = 0; i < 11; i++) {
     for (j = 0; j < 11; j++) {
-      printf("y=%d\n", plateau[i][j].coordonnee_Y);
       if (plateau[i][j].coordonnee_Y == 0) {
         pos_Pion.y = 163;
         pos_Pion.x = 30 * plateau[i][j].coordonnee_X + 30 + 7;
         if (plateau[i][j].joueur == 0) {
           (*nb_pions) = (*nb_pions + 1);
-          printf("i%d j%d\n", i, j);
           SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         } else if (plateau[i][j].joueur == 1) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_rouge, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         }
-
       } else if (plateau[i][j].coordonnee_Y == 1) {
         pos_Pion.y = 188;
         pos_Pion.x = 30 * plateau[i][j].coordonnee_X + 45 + 7;
         if (plateau[i][j].joueur == 0) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         } else if (plateau[i][j].joueur == 1) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_rouge, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         }
@@ -660,11 +698,11 @@ void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11]) {
         pos_Pion.y = 213;
         pos_Pion.x = 30 * plateau[i][j].coordonnee_X + 60 + 7;
         if (plateau[i][j].joueur == 0) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         } else if (plateau[i][j].joueur == 1) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_rouge, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         }
@@ -672,11 +710,11 @@ void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11]) {
         pos_Pion.y = 238;
         pos_Pion.x = 30 * plateau[i][j].coordonnee_X + 75 + 7;
         if (plateau[i][j].joueur == 0) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         } else if (plateau[i][j].joueur == 1) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_rouge, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         }
@@ -684,11 +722,11 @@ void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11]) {
         pos_Pion.y = 263;
         pos_Pion.x = 30 * plateau[i][j].coordonnee_X + 90 + 7;
         if (plateau[i][j].joueur == 0) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         } else if (plateau[i][j].joueur == 1) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_rouge, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         }
@@ -696,11 +734,11 @@ void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11]) {
         pos_Pion.y = 288;
         pos_Pion.x = 30 * plateau[i][j].coordonnee_X + 105 + 7;
         if (plateau[i][j].joueur == 0) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         } else if (plateau[i][j].joueur == 1) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_rouge, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         }
@@ -708,11 +746,11 @@ void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11]) {
         pos_Pion.y = 313;
         pos_Pion.x = 30 * plateau[i][j].coordonnee_X + 120 + 7;
         if (plateau[i][j].joueur == 0) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         } else if (plateau[i][j].joueur == 1) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_rouge, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         }
@@ -720,24 +758,23 @@ void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11]) {
         pos_Pion.y = 338;
         pos_Pion.x = 30 * plateau[i][j].coordonnee_X + 135 + 7;
         if (plateau[i][j].joueur == 0) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         } else if (plateau[i][j].joueur == 1) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_rouge, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         }
-
       } else if (plateau[i][j].coordonnee_Y == 8) {
         pos_Pion.y = 363;
         pos_Pion.x = 30 * plateau[i][j].coordonnee_X + 150 + 7;
         if (plateau[i][j].joueur == 0) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         } else if (plateau[i][j].joueur == 1) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_rouge, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         }
@@ -745,11 +782,11 @@ void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11]) {
         pos_Pion.y = 388;
         pos_Pion.x = 30 * plateau[i][j].coordonnee_X + 165 + 7;
         if (plateau[i][j].joueur == 0) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         } else if (plateau[i][j].joueur == 1) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_rouge, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         }
@@ -757,17 +794,42 @@ void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11]) {
         pos_Pion.y = 413;
         pos_Pion.x = 30 * plateau[i][j].coordonnee_X + 180 + 7;
         if (plateau[i][j].joueur == 0) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         } else if (plateau[i][j].joueur == 1) {
-          printf("i%d j%d\n", i, j);
+          *nb_pions = *nb_pions + 1;
           SDL_BlitSurface(pion_rouge, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         }
       }
     }
   }
+  SDL_BlitSurface(cacheur, NULL, ecran, &pos_cacheur);
+  if (*nb_joueur == 0)
+    info_joueur = TTF_RenderText_Blended(fontMenu, "Joueur Rouge", fontPurple);
+  else
+    info_joueur = TTF_RenderText_Blended(fontMenu, "Joueur Bleu", fontPurple);
+  SDL_BlitSurface(info_joueur, NULL, ecran, &pos_info_joueur);
+  SDL_BlitSurface(cacheur2, NULL, ecran, &pos_cacheur2);
+  if (*nb_pions != 0) {
+    char char_coup[100] = "";
+
+    // echange des joueurs car on l'incrémente avant
+    if (*nb_joueur == 1) {
+      sprintf(char_coup, "Le joueur rouge a joue en %d,%d", lig + 1, col + 1);
+      printf("%s\n", char_coup);
+      info_coup = TTF_RenderText_Blended(fontMenu, char_coup, fontPurple);
+      SDL_BlitSurface(info_coup, NULL, ecran, &pos_info_coup);
+    } else if (*nb_joueur == 0) {
+      sprintf(char_coup, "Le joueur bleu a joue en %d,%d", lig + 1, col + 1);
+      printf("%s\n", char_coup);
+      info_coup = TTF_RenderText_Blended(fontMenu, char_coup, fontPurple);
+      SDL_BlitSurface(info_coup, NULL, ecran, &pos_info_coup);
+    }
+    SDL_Flip(ecran);
+  }
+  *nb_joueur = (*nb_joueur + 1) % 2;
 }
 
 void affichage() {
@@ -817,9 +879,12 @@ void affichage() {
   ///////////////////////////////////////////:
   int annule = 0;
   int sauvegarde = 0;
-  pile *p = init();
+  int lig, col;
+  pile p;
+  init(&p);
   Case plateau[11][11];
   init_plateau(plateau);
+  printf("init\n");
   // Initialisation du plateau pour le test de charger
 
   // TEST POUR LA FONCTION CHARGER
@@ -861,9 +926,35 @@ void affichage() {
                   // Charger
                   printf("charger\n");
                   clean(menu);
-                  menu = 4;
+                  menu = 5;
                   affichage_menu(menu);
-                  Charge_plateau(&nb_pions, c, plateau);
+
+                  // char save[50];
+
+                  // if (clic_Valide(c, 15, 465, 130, 515) && sauvegarde) {
+                  //   strcpy(save, "save_1");
+                  //   clean(menu);
+                  //   menu = 4;
+                  //   affichage_menu(menu);
+                  //   break;
+
+                  // } else if (clic_Valide(c, 200, 465, 325, 515) &&
+                  // sauvegarde) {
+                  //   strcpy(save, "save_2");
+                  //   clean(menu);
+                  //   menu = 4;
+                  //   affichage_menu(menu);
+                  //   break;
+
+                  // } else if (clic_Valide(c, 400, 465, 530, 515) &&
+                  // sauvegarde) {
+                  //   strcpy(save, "save_3");
+                  //   clean(menu);
+                  //   menu = 4;
+                  //   affichage_menu(menu);
+                  //   break;
+                  // }
+
                   break;
                 }
                 break;
@@ -923,20 +1014,15 @@ void affichage() {
                 pion_rouge = IMG_Load("Images/pion_rouge.png");
                 TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
                 SDL_Color fontPurple = {0, 51, 102};
-                int lig, col;
-
+                // int lig, col;
+                SDL_BlitSurface(cacheur, NULL, ecran, &pos_cacheur);
+                printf("joueur %d \n", nb_joueur);
                 if (nb_joueur == 0)
                   info_joueur = TTF_RenderText_Blended(fontMenu, "Joueur Bleu",
                                                        fontPurple);
                 else
                   info_joueur = TTF_RenderText_Blended(fontMenu, "Joueur Rouge",
                                                        fontPurple);
-
-                pos_info_joueur.x = 15;
-                pos_info_joueur.y = 75;
-
-                pos_info_coup.x = 15;
-                pos_info_coup.y = 475;
 
                 SDL_BlitSurface(info_joueur, NULL, ecran, &pos_info_joueur);
                 SDL_Flip(ecran);
@@ -947,11 +1033,11 @@ void affichage() {
                   printf("lig %d col %d \n", lig, col);
                   // jeux(int X,int Y, int joueur ,pile * p,PLATEAU
 
-                  /*if (jeux(lig, col, nb_joueur, p, plateau)) {
+                  if (jeux(lig, col, nb_joueur, &p, plateau)) {
                     printf("continuer\n");
                   } else {
                     printf("fin\n");
-                  }*/
+                  }
                   break;
                 }
                 if (clic_Valide(c, 540, 235, 720, 275)) {
@@ -973,37 +1059,38 @@ void affichage() {
                   sauvegarde++;
                   break;
                 }
-                char save[50];
+                char *name_save;
                 if (clic_Valide(c, 15, 465, 130, 515) && sauvegarde) {
-                  strcpy(save, "save_1.txt");
+                  name_save = "save_1";
                   SDL_BlitSurface(cacheur2, NULL, ecran, &pos_cacheur2);
                   enum_save = TTF_RenderText_Blended(fontMenu, "Enregistre !",
                                                      fontPurple);
                   SDL_BlitSurface(enum_save, NULL, ecran, &pos_enum_save);
                   SDL_Flip(ecran);
                   sauvegarde = 0;
+                  sauvegarde_fichier(name_save, &p);
                   break;
                 } else if (clic_Valide(c, 200, 465, 325, 515) && sauvegarde) {
-                  strcpy(save, "save_2.txt");
+                  name_save = "save_2";
                   SDL_BlitSurface(cacheur2, NULL, ecran, &pos_cacheur2);
                   enum_save = TTF_RenderText_Blended(fontMenu, "Enregistre !",
                                                      fontPurple);
                   SDL_BlitSurface(enum_save, NULL, ecran, &pos_enum_save);
                   SDL_Flip(ecran);
                   sauvegarde = 0;
+                  sauvegarde_fichier(name_save, &p);
                   break;
                 } else if (clic_Valide(c, 400, 465, 530, 515) && sauvegarde) {
-                  strcpy(save, "save_3.txt");
+                  name_save = "save_3";
                   SDL_BlitSurface(cacheur2, NULL, ecran, &pos_cacheur2);
                   enum_save = TTF_RenderText_Blended(fontMenu, "Enregistre !",
                                                      fontPurple);
                   SDL_BlitSurface(enum_save, NULL, ecran, &pos_enum_save);
                   SDL_Flip(ecran);
                   sauvegarde = 0;
+                  sauvegarde_fichier(name_save, &p);
                   break;
                 }
-
-                // Fonction sauvegarder
 
                 if (clic_Valide(c, 540, 155, 645, 200)) {
                   // UNDO
@@ -1042,6 +1129,101 @@ void affichage() {
                       break;
                     }
                   }
+                }
+              }
+              case (5): {
+                char *name_save;
+                if (clic_Valide(c, 160, 475, 290, 515)) {
+                  clean(menu);
+                  menu = 1;
+                  affichage_menu(menu);
+                  break;
+                }
+
+                if (clic_Valide(c, 120, 280, 250, 330)) {
+                  printf("save 1\n");
+                  name_save = "save_1";
+                  int matrice[11][11];
+                  int k, n;
+                  chargement(&nb_joueur, matrice, name_save, &col, &lig);
+                  for (k = 0; k < 11; k++) {
+                    for (n = 0; n < 11; n++) {
+                      plateau[k][n].coordonnee_Y = k;
+                      plateau[k][n].coordonnee_X = n;
+                      if (k == 0 || n == 0) {
+                        plateau[k][n].borne = 1;
+                      } else if (k == 10 || n == 10) {
+                        plateau[k][n].borne = 2;
+                      } else {
+                        plateau[k][n].borne = 0;
+                      }
+                      plateau[k][n].joueur = matrice[k][n];
+                      printf("i%d j%d joueur%d\n",k,n,matrice[k][n]);
+                    }
+                  }
+                  // METTRE LA FONCTION CHARGER ICI
+                  clean(menu);
+                  menu = 4;
+                  affichage_menu(menu);
+                  Charge_plateau(&nb_pions, c, plateau, lig, col, &nb_joueur);
+                  annule = 1;
+                  break;
+                } else if (clic_Valide(c, 320, 280, 445, 325)) {
+                  printf("save 2\n");
+                  name_save = "save_2";
+                  int matrice[11][11];
+                  int k, n;
+                  chargement(&nb_joueur, matrice, name_save, &col, &lig);
+                  for (k = 0; k < 11; k++) {
+                    for (n = 0; n < 11; n++) {
+                      plateau[k][n].coordonnee_Y = k;
+                      plateau[k][n].coordonnee_X = n;
+                      if (k == 0 || n == 0) {
+                        plateau[k][n].borne = 1;
+                      } else if (k == 10 || n == 10) {
+                        plateau[k][n].borne = 2;
+                      } else {
+                        plateau[k][n].borne = 0;
+                      }
+                      plateau[k][n].joueur = matrice[k][n];
+                                            printf("i%d j%d joueur%d\n",k,n,matrice[k][n]);
+
+                    }
+                  }
+                  // METTRE LA FONCTION CHARGER ICI
+                  clean(menu);
+                  menu = 4;
+                  affichage_menu(menu);
+                  Charge_plateau(&nb_pions, c, plateau, lig, col, &nb_joueur);
+                  annule = 1;
+                  break;
+                } else if (clic_Valide(c, 520, 280, 645, 325)) {
+                  printf("save 3\n");
+                  name_save = "save_3";
+                  int matrice[11][11];
+                  int k, n;
+                  chargement(&nb_joueur, matrice, name_save, &col, &lig);
+                  for (k = 0; k < 11; k++) {
+                    for (n = 0; n < 11; n++) {
+                      plateau[k][n].coordonnee_Y = k;
+                      plateau[k][n].coordonnee_X = n;
+                      if (k == 0 || n == 0) {
+                        plateau[k][n].borne = 1;
+                      } else if (k == 10 || n == 10) {
+                        plateau[k][n].borne = 2;
+                      } else {
+                        plateau[k][n].borne = 0;
+                      }
+                      plateau[k][n].joueur = matrice[k][n];
+                    }
+                  }
+                  // METTRE LA FONCTION CHARGER ICI
+                  clean(menu);
+                  menu = 4;
+                  affichage_menu(menu);
+                  Charge_plateau(&nb_pions, c, plateau, lig, col, &nb_joueur);
+                  annule = 1;
+                  break;
                 }
               }
             }

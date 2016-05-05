@@ -14,6 +14,7 @@
 #include "jeux.h"
 #include "victoire.h"
 #include "pile.h"
+#include "Sauvegarde_histo.h"
 //#include "Sauvegarde_histo.h"
 
   // sudo apt-get install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-ttf2.0-dev
@@ -46,5 +47,5 @@ void affichage();
 void clean(int menu);
 void affichage_menu(int menu);
 void Jouer (int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col, int *annule, Case plateau[11][11]);
-void Charge_plateau(int *nb_pions, Clic c,Case plateau[11][11]);
+void Charge_plateau(int *nb_pions, Clic c,Case plateau[11][11],int lig,int col, int *nb_joueur);
 #endif
