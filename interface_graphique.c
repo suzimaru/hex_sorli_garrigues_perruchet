@@ -1,6 +1,10 @@
 #include "interface_graphique.h"
 
+///////////////////////// METTRE ICI LA FONCTION RANDOM POUR LE PREMIER JOUEUR
 int nb_joueur = 0;
+
+/////////////////////////////////////////////////////////////////
+
 int nb_pions = 0;
 int clic_Valide(Clic c, int borneInfX, int borneInfY, int borneSupX,
                 int borneSupY) {
@@ -191,8 +195,7 @@ void affichage_menu(int menu) {
       SDL_FillRect(cacheur, NULL, couleur_cacheur);
 
       PLATEAU = IMG_Load("Images/hex.png");
-      TTF_Font *fontMenu =
-          TTF_OpenFont("hacked/hacked.ttf", 40);
+      TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
       SDL_Color fontPurple = {0, 51, 102};
       quitter = TTF_RenderText_Blended(fontMenu, "Quitter", fontPurple);
       sauvegarder = TTF_RenderText_Blended(fontMenu, "Sauvegarder", fontPurple);
@@ -626,10 +629,12 @@ void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11]) {
   pion_rouge = IMG_Load("Images/pion_rouge.png");
   for (i = 0; i < 11; i++) {
     for (j = 0; j < 11; j++) {
+      printf("y=%d\n", plateau[i][j].coordonnee_Y);
       if (plateau[i][j].coordonnee_Y == 0) {
         pos_Pion.y = 163;
         pos_Pion.x = 30 * plateau[i][j].coordonnee_X + 30 + 7;
         if (plateau[i][j].joueur == 0) {
+          (*nb_pions) = (*nb_pions + 1);
           printf("i%d j%d\n", i, j);
           SDL_BlitSurface(pion_bleu, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
@@ -638,6 +643,7 @@ void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11]) {
           SDL_BlitSurface(pion_rouge, NULL, ecran, &pos_Pion);
           SDL_Flip(ecran);
         }
+
       } else if (plateau[i][j].coordonnee_Y == 1) {
         pos_Pion.y = 188;
         pos_Pion.x = 30 * plateau[i][j].coordonnee_X + 45 + 7;
@@ -768,17 +774,16 @@ void affichage() {
   ////////////////////////////////////// DECLARATION
   //////////////////////////////////////////////
 
-  Uint32 initflags =
-      SDL_INIT_VIDEO; 
+  Uint32 initflags = SDL_INIT_VIDEO;
 
-  fenetre.h = WINHI; 
+  fenetre.h = WINHI;
   fenetre.w = WINWI;
 
-  Uint8 video_bpp = 32;      
+  Uint8 video_bpp = 32;
   Uint32 videoflags = SDL_HWSURFACE;
 
-  bool continuer; 
-  SDL_Event event; 
+  bool continuer;
+  SDL_Event event;
 
   ///////////////////////////////////////// INITIALISATION
   /////////////////////////////////////////
@@ -788,9 +793,7 @@ void affichage() {
     exit(1);
   }
 
-
-  ecran = SDL_SetVideoMode(fenetre.w, fenetre.h, video_bpp,
-                           videoflags);
+  ecran = SDL_SetVideoMode(fenetre.w, fenetre.h, video_bpp, videoflags);
 
   if (ecran == NULL) {
     fprintf(stderr, "N'arrive pas a` etablir mode video%dx%dx%d : %s\n",
@@ -819,6 +822,7 @@ void affichage() {
   init_plateau(plateau);
   // Initialisation du plateau pour le test de charger
 
+  // TEST POUR LA FONCTION CHARGER
   // plateau[0][0].joueur = 1;
   // plateau[1][0].joueur = 0;
 

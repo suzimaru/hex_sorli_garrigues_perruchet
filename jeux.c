@@ -21,8 +21,8 @@ void init_plateau(Case plateau[11][11]) {
   for (i = 0; i < 11; i++) {
     for (k = 0; k < 11; k++) {
       plateau[i][k] = init_case();
-      plateau[i][k].coordonnee_X = i;
-      plateau[i][k].coordonnee_Y = k;
+      plateau[i][k].coordonnee_X = k;
+      plateau[i][k].coordonnee_Y = i;
     }
   }
 }
