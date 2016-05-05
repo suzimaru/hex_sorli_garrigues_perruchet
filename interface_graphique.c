@@ -1033,7 +1033,7 @@ void affichage() {
                   printf("lig %d col %d \n", lig, col);
                   // jeux(int X,int Y, int joueur ,pile * p,PLATEAU
 
-                  if (jeux(lig, col, nb_joueur, &p, plateau)) {
+                  if (jeux(col, lig, nb_joueur, &p, plateau)) {
                     printf("continuer\n");
                   } else {
                     printf("fin\n");

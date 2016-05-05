@@ -32,7 +32,7 @@ void remplir(int X, int Y, int joueur, Case plateau[11][11])
 {
   plateau[Y][X].coordonnee_X = X;
   plateau[Y][X].coordonnee_Y = Y;
-
+  printf("y%d x%d \n",Y,X);
   if (joueur == 0) plateau[Y][X].joueur = 0;
 
   if (joueur == 1) plateau[Y][X].joueur = 1;
@@ -114,7 +114,7 @@ void faire_un_coup(int X, int Y, int joueur, Case plateau[11][11], pile **p)
   if (vrai == 0)  // Vérifie que la case est vide
   {
     // fonction marche problème d'affichage
-    //remplir(X, Y, joueur, plateau);
+    remplir(X, Y, joueur, plateau);
     enregistre_coup(*p, X, Y, joueur);
 
     // printf("pile vide : %d\n",vide );
@@ -123,10 +123,10 @@ void faire_un_coup(int X, int Y, int joueur, Case plateau[11][11], pile **p)
 
 int jeux(int X, int Y, int joueur, pile *p, Case plateau[11][11]) {
   int end = 0;
-  if (!joueur)
-    joueur = 1;
-  else if (joueur)
-    joueur = 0;
+  //if (!joueur)
+    //joueur = 1;
+  //else if (joueur)
+    //joueur = 0;
 
   faire_un_coup(X, Y, joueur, plateau, &p);
   printf("coup joué\n");
