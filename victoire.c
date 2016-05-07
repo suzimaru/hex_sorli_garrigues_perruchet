@@ -1,108 +1,169 @@
 #include "victoire.h"
 
-int nb_touche(
-    Case plateau[11][11], int y,
-    int x)  // Compte le nombre de case adjacente d'une case du plateau donnée
+int nb_touche(Case plateau[11][11], int y, int x)
+// Compte le nombre de case adjacente d'une case du plateau donnée
 {
   int touche = 0;
-  printf("---> nb_touche\n");
-  printf("Plateau case test nb touche: y : %d  x : %d \n",plateau[y][x].coordonnee_Y,plateau[y][x].coordonnee_X );
 
-  int k = y-1;
-  int i;
-  for (i = x; i != x + 1; i++) {
-    if (plateau[k][i].joueur == plateau[y][x].joueur) { printf("1 Y :%d X:%d  joueur test : %d case trouvé : %d \n",k,i,plateau[k][i].joueur,plateau[y][x].joueur ); touche++; }
+  if (y == 0) {
+    // en haut à gauche
+    if (x == 0) {
+      printf("en haut gauche\n");
+      if (plateau[y][x].joueur == plateau[y + 1][x].joueur)
+      {
+        printf("gsg %d  %d\n",y,x);
+        touche++;
+      }  
+      if (plateau[y][x].joueur == plateau[y][x + 1].joueur) touche++;
+      printf("%d \n",touche);
+    }
+    // en haut à droite
+    else if (x == 10) {
+      printf("en haut droit\n");
+      if (plateau[y][x].joueur == plateau[y - 1][x].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y - 1][x - 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y][x - 1].joueur) touche++;
+      printf("%d \n",touche);
+    }
+    // ligne du haut
+    else {
+      printf("ligne haut \n");
+      if (plateau[y][x].joueur == plateau[y][x - 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y][x + 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y + 1][x].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y + 1][x - 1].joueur) touche++;
+      printf("%d \n",touche);
+    }
+  } else if (y == 10) {
+    // en bas à gauche
+    if (x == 0) {
+      printf("en bas à gauche\n");
+      if (plateau[y][x].joueur == plateau[y - 1][x].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y - 1][x + 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y][x + 1].joueur) touche++;
+      printf("%d \n",touche);
+    }
+    // en bas à droite
+    else if (x == 10) {
+      printf("en bas droite\n");
+      if (plateau[y][x].joueur == plateau[y + 1][x].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y][x - 1].joueur) touche++;
+      printf("%d \n",touche);
+    }
+    // ligne du bas
+    else {
+      printf("ligne du bas\n");
+      if (plateau[y][x].joueur == plateau[y][x - 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y][x + 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y - 1][x].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y - 1][x + 1].joueur) touche++;
+      printf("%d \n",touche);
+    }
+  } else {
+    // cote de gauche
+    if (x == 0) {
+      printf("cote gauche\n");
+      if (plateau[y][x].joueur==plateau[y-1][x].joueur) touche++;
+      if (plateau[y][x].joueur==plateau[y-1][x+1].joueur) touche++;
+      if (plateau[y][x].joueur==plateau[y][x+1].joueur) touche++;
+      if (plateau[y][x].joueur==plateau[y+1][x].joueur) touche++;
+      printf("%d \n",touche);
+    }
+
+    // cote de droite
+    else if (x == 10) {
+      printf("cote droit\n");
+      if (plateau[y][x].joueur==plateau[y-1][x].joueur) touche++;
+      if (plateau[y][x].joueur==plateau[y][x-1].joueur) touche++;
+      if (plateau[y][x].joueur==plateau[y+1][x-1].joueur) touche++;
+      if (plateau[y][x].joueur==plateau[y+1][x].joueur) touche++;
+      printf("%d \n",touche);
+    }
+
+    // tous les autres cas
+    else {
+      printf("autre\n");
+      if (plateau[y][x].joueur==plateau[y-1][x].joueur) touche++;
+      if (plateau[y][x].joueur==plateau[y-1][x+1].joueur) touche++;
+      if (plateau[y][x].joueur==plateau[y][x+1].joueur) touche++;
+      if (plateau[y][x].joueur==plateau[y][x-1].joueur) touche++;
+      if (plateau[y][x].joueur==plateau[y+1][x].joueur) touche++;
+      if (plateau[y][x].joueur==plateau[y+1][x-1].joueur) touche++;
+      printf("%d \n",touche);
+    }
   }
-  k=y;
-  for (i = x - 1; i != x + 1; i++)
-
-  {
-    if (plateau[k][i].joueur == plateau[y][x].joueur) { printf("2 Y :%d X:%d  joueur test : %d case trouvé : %d \n",k,i,plateau[k][i].joueur,plateau[y][x].joueur ); touche++; }
-  }
-
-  
-
-  k = y + 1;
-  for (i = x - 1; i != x; i++) {
-    if (plateau[k][i].joueur == plateau[y][x].joueur) { printf("3 Y :%d X:%d  joueur test : %d case trouvé : %d \n",k,i,plateau[k][i].joueur,plateau[y][x].joueur ); touche++; }
-  }
-
-  
-
-  printf("nombre de touche : %d\n",touche-1 );
-
-  return (touche-1 );  //*(-1) Durant l'éxécution, le pion se compte lui même.
+  return touche; 
 }
 
 Case trouver_case(Case plateau[11][11], int lvl_ligne, int lvl_colonne, int y,
                   int x)  // Au premier lancement lvl_ligne = lvl_colonne = 0
-{
-  Case new_case;
+ {
+ Case new_case;
   new_case.coordonnee_Y = 0;
   new_case.coordonnee_X = 0;
   new_case.borne = 0;
   new_case.joueur = -1;
 
-  printf("------> trouver case\n");
-     printf("coordonnée testé trouvé case  :  Y : %d X: %d \n",y,x );
-     printf("niveau ligne : %d niveau colonne : %d \n",lvl_ligne,lvl_colonne );
+//   printf("------> trouver case\n");
+//      printf("coordonnée testé trouvé case  :  Y : %d X: %d \n",y,x );
+//      printf("niveau ligne : %d niveau colonne : %d \n",lvl_ligne,lvl_colonne );
 
 
-  if (lvl_ligne == 0) {
-    if (lvl_colonne ==
-        1)  // Le programme recherche case par case s'il y a une case adjacente
-    {
-      // if (plateau[y][x - 1].joueur == plateau[y][x].joueur)
-      printf("test1\n");
-              if (plateau[y-1][x].joueur == plateau[y][x].joueur)
+//   if (lvl_ligne == 0) {
+//     if (lvl_colonne ==
+//         1)  // Le programme recherche case par case s'il y a une case adjacente
+//     {
+//       // if (plateau[y][x - 1].joueur == plateau[y][x].joueur)
+//       printf("test1\n");
+//               if (plateau[y-1][x].joueur == plateau[y][x].joueur)
 
-        {new_case = plateau[y-1][x]; printf(" plateau[y-1][x] coordonnée : y %d x : %d joueur : %d \n",plateau[y-1][x].coordonnee_Y,plateau[y-1][x].coordonnee_X, plateau[y-1][x].joueur ); }
-    }
-    if (lvl_colonne == 2) {
-      printf("test2\n");
-            // if (plateau[y + 1][x - 1].joueur == plateau[y][x].joueur)
+//         {new_case = plateau[y-1][x]; printf(" plateau[y-1][x] coordonnée : y %d x : %d joueur : %d \n",plateau[y-1][x].coordonnee_Y,plateau[y-1][x].coordonnee_X, plateau[y-1][x].joueur ); }
+//     }
+//     if (lvl_colonne == 2) {
+//       printf("test2\n");
+//             // if (plateau[y + 1][x - 1].joueur == plateau[y][x].joueur)
 
-      if (plateau[y - 1][x + 1].joueur == plateau[y][x].joueur)
-        {new_case = plateau[y-1][x + 1]; printf(" plateau[y-1][x + 1]  coordonnée : y %d x : %d joueur : %d \n",plateau[y-1][x + 1].coordonnee_Y,plateau[y-1][x + 1].coordonnee_X, plateau[y-1][x + 1].joueur ); }
-    }
-  }
+//       if (plateau[y - 1][x + 1].joueur == plateau[y][x].joueur)
+//         {new_case = plateau[y-1][x + 1]; printf(" plateau[y-1][x + 1]  coordonnée : y %d x : %d joueur : %d \n",plateau[y-1][x + 1].coordonnee_Y,plateau[y-1][x + 1].coordonnee_X, plateau[y-1][x + 1].joueur ); }
+//     }
+//   }
   
-  if (lvl_ligne == 1) {
-    if (lvl_colonne == 0) {
-      printf("test3\n");
-      // if (plateau[y - 1][x].joueur == plateau[y][x].joueur)
-              if (plateau[y][x-1].joueur == plateau[y][x].joueur)
+//   if (lvl_ligne == 1) {
+//     if (lvl_colonne == 0) {
+//       printf("test3\n");
+//       // if (plateau[y - 1][x].joueur == plateau[y][x].joueur)
+//               if (plateau[y][x-1].joueur == plateau[y][x].joueur)
 
-        {new_case = plateau[y][x-1];printf(" plateau[y][x-1] coordonnée : y %d x : %d joueur : %d \n",plateau[y][x-1].coordonnee_Y,plateau[y][x-1].coordonnee_X, plateau[y][x-1].joueur );  }
-    }
+//         {new_case = plateau[y][x-1];printf(" plateau[y][x-1] coordonnée : y %d x : %d joueur : %d \n",plateau[y][x-1].coordonnee_Y,plateau[y][x-1].coordonnee_X, plateau[y][x-1].joueur );  }
+//     }
 
-    if (lvl_colonne == 2) {
-      // if (plateau[y + 1][x].joueur == plateau[y][x].joueur)
-      printf("test4\n");
-              if (plateau[y][x+1].joueur == plateau[y][x].joueur)
+//     if (lvl_colonne == 2) {
+//       // if (plateau[y + 1][x].joueur == plateau[y][x].joueur)
+//       printf("test4\n");
+//               if (plateau[y][x+1].joueur == plateau[y][x].joueur)
 
-        {new_case = plateau[y][x+1];printf(" plateau[y][x+1] coordonnée : y %d x : %d joueur : %d \n",plateau[y][x+1].coordonnee_Y,plateau[y][x+1].coordonnee_X, plateau[y][x+1].joueur ); }
-    }
-  }
+//         {new_case = plateau[y][x+1];printf(" plateau[y][x+1] coordonnée : y %d x : %d joueur : %d \n",plateau[y][x+1].coordonnee_Y,plateau[y][x+1].coordonnee_X, plateau[y][x+1].joueur ); }
+//     }
+//   }
 
-  if (lvl_ligne == 2) {
-    if (lvl_colonne == 0) {
-      // if (plateau[y - 1][x + 1].joueur == plateau[y][x].joueur)
-      printf("test5\n");
-              if (plateau[y + 1][x - 1].joueur == plateau[y][x].joueur)
+//   if (lvl_ligne == 2) {
+//     if (lvl_colonne == 0) {
+//       // if (plateau[y - 1][x + 1].joueur == plateau[y][x].joueur)
+//       printf("test5\n");
+//               if (plateau[y + 1][x - 1].joueur == plateau[y][x].joueur)
 
-        {new_case = plateau[y+1][x - 1];printf(" plateau[y+1][x - 1] coordonnée : y %d x : %d joueur : %d \n",plateau[y+1][x - 1].coordonnee_Y,plateau[y+1][x-1].coordonnee_X, plateau[y+1][x-1].joueur ); }
-    }
+//         {new_case = plateau[y+1][x - 1];printf(" plateau[y+1][x - 1] coordonnée : y %d x : %d joueur : %d \n",plateau[y+1][x - 1].coordonnee_Y,plateau[y+1][x-1].coordonnee_X, plateau[y+1][x-1].joueur ); }
+//     }
 
-    if (lvl_colonne == 1) {
-      // if (plateau[y][x + 1].joueur == plateau[y][x].joueur)
-      printf("test6\n");
-              if (plateau[y+1][x].joueur == plateau[y][x].joueur)
+//     if (lvl_colonne == 1) {
+//       // if (plateau[y][x + 1].joueur == plateau[y][x].joueur)
+//       printf("test6\n");
+//               if (plateau[y+1][x].joueur == plateau[y][x].joueur)
 
-        {new_case = plateau[y+1][x];printf(" plateau[y+1][x] coordonnée : y %d x : %d joueur : %d \n",plateau[y+1][x].coordonnee_Y,plateau[y+1][x].coordonnee_X, plateau[y+1][x].joueur );}
-    }
-  }
-  printf("new_case : y : %d x : %d borne : %d joueur %d\n",new_case.coordonnee_Y,new_case.coordonnee_X,new_case.borne,new_case.joueur );
+//         {new_case = plateau[y+1][x];printf(" plateau[y+1][x] coordonnée : y %d x : %d joueur : %d \n",plateau[y+1][x].coordonnee_Y,plateau[y+1][x].coordonnee_X, plateau[y+1][x].joueur );}
+//     }
+//   }
+//   printf("new_case : y : %d x : %d borne : %d joueur %d\n",new_case.coordonnee_Y,new_case.coordonnee_X,new_case.borne,new_case.joueur );
   return (new_case);
 }
 

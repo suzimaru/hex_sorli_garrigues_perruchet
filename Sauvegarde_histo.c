@@ -151,14 +151,17 @@ void chargement(pile *p,int *joueur,int plateau[TAILLE_PLATEAU][TAILLE_PLATEAU],
 	while (strcmp(position_courante,fin_game)!=0 && feof(fichier)==0){
 		printf("charger : boucle ");
 		fscanf(fichier,"\\play %d %d %d",&coup.joueur,&coup.coordonnee_y,&coup.coordonnee_x);
+		coup.coordonnee_x=coup.coordonnee_x-1;
+		coup.coordonnee_y=coup.coordonnee_y-1;
+		printf("y %d x %d\n",coup.coordonnee_y,coup.coordonnee_x);
 		empiler_pile(p,coup);
-		printf("\\play %d %d %d\n",p->top->elt.joueur,p->top->elt.coordonnee_y,p->top->elt.coordonnee_x);
+		printf("\\play %d %d %d\n",p->top->elt.joueur,p->top->elt.coordonnee_y-1,p->top->elt.coordonnee_x-1);
 		fgets(position_courante,20,fichier);
 		printf("%s",position_courante);
 	}
 	
 	depiler(p);
-	depiler(p);	
+	depiler(p);
 	depiler(p);
 	
 	
@@ -172,8 +175,8 @@ void chargement(pile *p,int *joueur,int plateau[TAILLE_PLATEAU][TAILLE_PLATEAU],
 	coup=sommet(p);
 
 	*joueur=coup.joueur;
-	*x=coup.coordonnee_x-1;
-	*y=coup.coordonnee_y-1;
+	*x=coup.coordonnee_x;
+	*y=coup.coordonnee_y;
 
 
 	fclose(fichier);

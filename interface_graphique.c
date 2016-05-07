@@ -629,7 +629,7 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
   }
 
   if (ajouer) {
-    jeux(*col, *lig, *nb_joueur, p, plateau);
+    jeux(*lig, *col, *nb_joueur, p, plateau);
       printf("joué\n");
     printf("pions=%d\n", *nb_pions);
     SDL_BlitSurface(cacheur2, NULL, ecran, &pos_cacheur2);
@@ -887,7 +887,7 @@ void affichage() {
   init(&p);
   Case plateau[11][11];
   init_plateau(plateau);
-  printf("init\n");
+  
   // Initialisation du plateau pour le test de charger
 
   // TEST POUR LA FONCTION CHARGER
@@ -1073,6 +1073,7 @@ void affichage() {
                   SDL_Flip(ecran);
                   sauvegarde = 0;
                   sauvegarde_fichier(name_save, &p);
+
                   break;
                 } else if (clic_Valide(c, 200, 465, 325, 515) && sauvegarde) {
                   name_save = "save_2";
@@ -1093,6 +1094,7 @@ void affichage() {
                   SDL_Flip(ecran);
                   sauvegarde = 0;
                   sauvegarde_fichier(name_save, &p);
+                  affiche_pile(&p);
                   break;
                 }
 
@@ -1190,7 +1192,7 @@ void affichage() {
                         plateau[k][n].borne = 0;
                       }
                       plateau[k][n].joueur = matrice[k][n];
-                                            printf("i%d j%d joueur%d\n",k,n,matrice[k][n]);
+                      printf("i%d j%d joueur%d\n",k,n,matrice[k][n]);
 
                     }
                   }

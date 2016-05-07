@@ -1,4 +1,3 @@
-
 #include "jeux.h"
 
 //////////////////////////////////// STRUCTURE
@@ -21,8 +20,8 @@ void init_plateau(Case plateau[11][11]) {
   for (i = 0; i < 11; i++) {
     for (k = 0; k < 11; k++) {
       plateau[i][k] = init_case();
-      plateau[i][k].coordonnee_X = i;
-      plateau[i][k].coordonnee_Y = k;
+      plateau[i][k].coordonnee_X = k;
+      plateau[i][k].coordonnee_Y = i;
     }
   }
 }
@@ -30,7 +29,7 @@ void init_plateau(Case plateau[11][11]) {
 void remplir(int Y, int X, int joueur, Case plateau[11][11])
 
 {
-  
+ 
   plateau[Y][X].coordonnee_X = X;
   plateau[Y][X].coordonnee_Y = Y;
 
@@ -38,6 +37,8 @@ void remplir(int Y, int X, int joueur, Case plateau[11][11])
 
   if (joueur == 1) plateau[Y][X].joueur = 1;
   plateau[Y][X].borne = verif_borne(Y,X,joueur);
+    printf("case du plateau : y :%d  x : %d  borne : %d joueur : %d \n",plateau[Y][X].coordonnee_Y,plateau[Y][X].coordonnee_X,plateau[Y][X].borne,plateau[Y][X].joueur );
+
 }
 
 //////////////////////////////////// VERIFICATION
@@ -81,21 +82,23 @@ int verif_borne(int y, int x, int joueur)  // Vérifie si un coup joué est sur 
 {
   int vrai = 0;
 
-  if (joueur == 1)  // Si joueur 1 les extrémités sont les côté verticaux
+  if (joueur == 0)  // Si joueur 1 les extrémités sont les côté verticaux
   {
     if ((y >= 0 || y <= 10) && (x == 0)) vrai = 1;
 
     if ((y >= 0 || y <= 10) && (x == 10)) vrai = 2;
   }
 
-  if (joueur == 0)  // SI joueur 2 les extrémités sont les côtés horizontaux.
+  if (joueur == 1)  // SI joueur 2 les extrémités sont les côtés horizontaux.
   {
     if ((x >= 0 || x <= 10) && (y == 0)) vrai = 1;
 
     if ((x >= 0 || x <= 10) && (y == 10)) vrai = 2;
 
   }
-  
+ 
+  // printf("borne = %d \n",vrai );
+  // printf("sortie borne\n");
   return (vrai);
 }
 
@@ -111,10 +114,10 @@ void enregistre_coup(pile *p, int Y, int X, int couleur)
   new.coordonnee_x = X;
   new.coordonnee_y = Y;
   new.joueur = couleur;
-  new.borne = verif_borne(X, Y, new.joueur);
+  new.borne = verif_borne(Y, X, new.joueur);
 
  
-  
+  printf("enregistrer y %d x %d\n",Y,X);
   empiler_pile(p, new);
 
 
@@ -126,19 +129,19 @@ int choix_joueur() {
   return (rand() % 2);  // choisis un chiffre au hasard
 }
 
-void faire_un_coup(int Y, int X, int joueur, Case plateau[11][11], pile **p)
+void faire_un_coup(int Y, int X, int joueur, Case plateau[11][11], pile *p)
 
 {
   int vrai = 0;
   if (vrai==0)  // Vérifie que la case est vide
   {
                     // fonction marche problème d'affichage
-    remplir(X, Y, joueur, plateau);
-    enregistre_coup(*p, X, Y, joueur);
+    remplir(Y, X, joueur, plateau);
+    enregistre_coup(p, Y, X, joueur);
 
     // printf("pile vide : %d\n",vide );
 
-  } 
+  }
 }
 
 int jeux(int Y, int X, int joueur, pile *p, Case plateau[11][11])
@@ -146,18 +149,17 @@ int jeux(int Y, int X, int joueur, pile *p, Case plateau[11][11])
   int end = 1;
   if (joueur == 0) joueur =1;
   else if (joueur == 1) joueur = 0;
-  
-  faire_un_coup(Y, X, joueur, plateau, &p);
+ 
+  faire_un_coup(Y, X, joueur, plateau, p);
   // printf("coup joué\n");
 
-  
-  printf("Element de la pile joueur :%d  X: %d Y: %d borne: %d \n",p->top->elt.joueur,p->top->elt.coordonnee_y,p->top->elt.coordonnee_x,p->top->elt.borne );
+      printf("Coordonnée jeu    :   y: %d   x : %d joueur : %d  borne : %d  \n", plateau[Y][X].coordonnee_Y,plateau[Y][X].coordonnee_X,plateau[Y][X].joueur,plateau[Y][X].borne );
 
+
+ 
 
   if (victoire(joueur, p, plateau))
     return (end = 0);
-  else  
+  else 
     return (end);
 }
-
-
