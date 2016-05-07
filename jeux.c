@@ -123,10 +123,10 @@ void faire_un_coup(int X, int Y, int joueur, Case plateau[11][11], pile **p)
 
 int jeux(int X, int Y, int joueur, pile *p, Case plateau[11][11]) {
   int end = 0;
-  //if (!joueur)
-    //joueur = 1;
-  //else if (joueur)
-    //joueur = 0;
+  if (!joueur)
+  joueur = 1;
+  else if (joueur)
+  joueur = 0;
 
   faire_un_coup(X, Y, joueur, plateau, &p);
   printf("coup joué\n");

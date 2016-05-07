@@ -91,8 +91,8 @@ void sauvegarde_fichier(char name_save[],pile *historique){
 	while (paux->top!=NULL){
 		
 		elt=paux->top->elt;
-		plateau[elt.coordonnee_x][elt.coordonnee_y]=elt.joueur;
-		fprintf(fichier,"\\play %d %d %d \n",elt.joueur,elt.coordonnee_x+1,elt.coordonnee_y+1);
+		plateau[elt.coordonnee_y][elt.coordonnee_x]=elt.joueur;
+		fprintf(fichier,"\\play %d %d %d \n",elt.joueur,elt.coordonnee_y+1,elt.coordonnee_x+1);
 		paux->top=paux->top->next;
 		position_endgame += 14;
 		position_endhex += 14;		
