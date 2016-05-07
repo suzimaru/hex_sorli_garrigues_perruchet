@@ -337,7 +337,7 @@ void clean(int menu) {
 }
 
 void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
-           int *annule, Case plateau[11][11]) {
+           int *annule, Case plateau[11][11], pile *p) {
   TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
   SDL_Color fontPurple = {0, 51, 102};
 
@@ -629,6 +629,8 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
   }
 
   if (ajouer) {
+    jeux(*col, *lig, *nb_joueur, p, plateau);
+      printf("joué\n");
     printf("pions=%d\n", *nb_pions);
     SDL_BlitSurface(cacheur2, NULL, ecran, &pos_cacheur2);
     if (*nb_pions != 0) {
@@ -659,6 +661,7 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     SDL_BlitSurface(info_coup, NULL, ecran, &pos_info_coup);
     SDL_Flip(ecran);
   }
+  
 }
 
 void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11], int lig,
@@ -1029,15 +1032,16 @@ void affichage() {
                 if (clic_Valide(c, 20, 145, 525, 450)) {
                   // PLATEAU
 
-                  Jouer(&nb_joueur, &nb_pions, c, &lig, &col, &annule, plateau);
+                  Jouer(&nb_joueur, &nb_pions, c, &lig, &col, &annule, plateau, &p);
                   printf("lig %d col %d \n", lig, col);
+                  printf("touche = %d\n",nb_touche(plateau,col,lig));
                   // jeux(int X,int Y, int joueur ,pile * p,PLATEAU
 
-                  if (jeux(col, lig, nb_joueur, &p, plateau)) {
+                  /*if (jeux(col, lig, nb_joueur, &p, plateau)) {
                     printf("continuer\n");
                   } else {
                     printf("fin\n");
-                  }
+                  }*/
                   break;
                 }
                 if (clic_Valide(c, 540, 235, 720, 275)) {
@@ -1145,7 +1149,7 @@ void affichage() {
                   name_save = "save_1";
                   int matrice[11][11];
                   int k, n;
-                  chargement(&nb_joueur, matrice, name_save, &col, &lig);
+                  chargement(&p,&nb_joueur, matrice, name_save, &col, &lig);
                   for (k = 0; k < 11; k++) {
                     for (n = 0; n < 11; n++) {
                       plateau[k][n].coordonnee_Y = k;
@@ -1173,7 +1177,7 @@ void affichage() {
                   name_save = "save_2";
                   int matrice[11][11];
                   int k, n;
-                  chargement(&nb_joueur, matrice, name_save, &col, &lig);
+                  chargement(&p,&nb_joueur, matrice, name_save, &col, &lig);
                   for (k = 0; k < 11; k++) {
                     for (n = 0; n < 11; n++) {
                       plateau[k][n].coordonnee_Y = k;
@@ -1202,7 +1206,8 @@ void affichage() {
                   name_save = "save_3";
                   int matrice[11][11];
                   int k, n;
-                  chargement(&nb_joueur, matrice, name_save, &col, &lig);
+                  chargement(&p,&nb_joueur, matrice, name_save, &col, &lig);
+                  affiche_pile(&p);
                   for (k = 0; k < 11; k++) {
                     for (n = 0; n < 11; n++) {
                       plateau[k][n].coordonnee_Y = k;

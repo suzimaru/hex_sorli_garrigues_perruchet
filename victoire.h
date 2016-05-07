@@ -20,10 +20,11 @@ typedef struct Pion_s
 } Case;
 
 
-int nb_touche( Case plateau[11][11] ,int x,int y);
-Case trouver_case( Case plateau[11][11] ,int lvl_ligne, int lvl_colonne,int x,int y) ;
-int deplacement_plateau(Case plateau[11][11] ,int x,int y,int borne);
-int borne_oppose(pile **p,int joueur);
+int nb_touche( Case plateau[11][11] ,int y,int x);
+Case trouver_case( Case plateau[11][11] ,int lvl_ligne, int lvl_colonne,int y,int x);
+Case parcourir_case (Case plateau[11][11], int y, int x,int borne_up, int joueur_up,int *end);
+int deplacement_plateau(Case plateau[11][11] ,int y,int x,int borne);
+int borne_oppose(pile *p,int joueur);
 int victoire(int joueur,pile *p,Case plateau[11][11]);
 
 

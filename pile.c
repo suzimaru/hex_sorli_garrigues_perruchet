@@ -26,7 +26,7 @@ void affiche_pile (pile *p)
     Cell *c=p->top;
     while (c!=NULL)
     {
-     
+     printf("jou:%d x:%d y:%d\n",c->elt.joueur,c->elt.coordonnee_x,c->elt.coordonnee_y);
       c=c->next;
     }
   }

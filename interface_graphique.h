@@ -46,6 +46,6 @@ int clic_Valide(Clic c, int borneInfX, int borneInfY, int borneSupX,
 void affichage();
 void clean(int menu);
 void affichage_menu(int menu);
-void Jouer (int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col, int *annule, Case plateau[11][11]);
+void Jouer (int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col, int *annule, Case plateau[11][11], pile *p);
 void Charge_plateau(int *nb_pions, Clic c,Case plateau[11][11],int lig,int col, int *nb_joueur);
 #endif
