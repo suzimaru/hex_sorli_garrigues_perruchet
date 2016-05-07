@@ -1104,6 +1104,7 @@ void affichage() {
                   if (!annule) {
                     if (nb_pions != 0) {
                       printf("lig=%d col=%d\n", lig, col);
+                      depiler(&p);
                       plateau[lig][col].joueur = -1;
                       printf("joueur=%d\n", plateau[lig][col].joueur);
                       pion_annule = IMG_Load("Images/Undo.png");
