@@ -1,8 +1,8 @@
 #include "interface_graphique.h"
 
 ///////////////////////// METTRE ICI LA FONCTION RANDOM POUR LE PREMIER JOUEUR
-int nb_joueur = 0;
 
+int nb_joueur;
 /////////////////////////////////////////////////////////////////
 
 int nb_pions = 0;
@@ -846,10 +846,11 @@ void affichage() {
 
   Uint8 video_bpp = 32;
   Uint32 videoflags = SDL_HWSURFACE;
-
+  
   bool continuer;
   SDL_Event event;
-
+  nb_joueur = choix_joueur();
+  printf("joueur =%d\n",nb_joueur);
   ///////////////////////////////////////// INITIALISATION
   /////////////////////////////////////////
 
@@ -931,33 +932,6 @@ void affichage() {
                   clean(menu);
                   menu = 5;
                   affichage_menu(menu);
-
-                  // char save[50];
-
-                  // if (clic_Valide(c, 15, 465, 130, 515) && sauvegarde) {
-                  //   strcpy(save, "save_1");
-                  //   clean(menu);
-                  //   menu = 4;
-                  //   affichage_menu(menu);
-                  //   break;
-
-                  // } else if (clic_Valide(c, 200, 465, 325, 515) &&
-                  // sauvegarde) {
-                  //   strcpy(save, "save_2");
-                  //   clean(menu);
-                  //   menu = 4;
-                  //   affichage_menu(menu);
-                  //   break;
-
-                  // } else if (clic_Valide(c, 400, 465, 530, 515) &&
-                  // sauvegarde) {
-                  //   strcpy(save, "save_3");
-                  //   clean(menu);
-                  //   menu = 4;
-                  //   affichage_menu(menu);
-                  //   break;
-                  // }
-
                   break;
                 }
                 break;
@@ -1017,7 +991,6 @@ void affichage() {
                 pion_rouge = IMG_Load("Images/pion_rouge.png");
                 TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
                 SDL_Color fontPurple = {0, 51, 102};
-                // int lig, col;
                 SDL_BlitSurface(cacheur, NULL, ecran, &pos_cacheur);
                 printf("joueur %d \n", nb_joueur);
                 if (nb_joueur == 0)
@@ -1034,14 +1007,8 @@ void affichage() {
 
                   Jouer(&nb_joueur, &nb_pions, c, &lig, &col, &annule, plateau, &p);
                   printf("lig %d col %d \n", lig, col);
-                  printf("touche = %d\n",nb_touche(plateau,col,lig));
-                  // jeux(int X,int Y, int joueur ,pile * p,PLATEAU
-
-                  /*if (jeux(col, lig, nb_joueur, &p, plateau)) {
-                    printf("continuer\n");
-                  } else {
-                    printf("fin\n");
-                  }*/
+                  printf("touche = %d\n",nb_touche(plateau,lig,col));
+                  
                   break;
                 }
                 if (clic_Valide(c, 540, 235, 720, 275)) {

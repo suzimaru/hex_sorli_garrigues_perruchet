@@ -117,7 +117,7 @@ void enregistre_coup(pile *p, int Y, int X, int couleur)
   new.borne = verif_borne(Y, X, new.joueur);
 
  
-  printf("enregistrer y %d x %d\n",Y,X);
+  printf("enregistrer y %d x %d\n",new.coordonnee_y,new.coordonnee_x);
   empiler_pile(p, new);
 
 
@@ -126,6 +126,7 @@ void enregistre_coup(pile *p, int Y, int X, int couleur)
 //////////////////////////////////// JEUX ////////////////////////////////////
 
 int choix_joueur() {
+  srand(time(0));
   return (rand() % 2);  // choisis un chiffre au hasard
 }
 

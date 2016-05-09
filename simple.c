@@ -13,8 +13,6 @@
 
 int main(int argc, char *argv[])
 {
-	pile p;
-	init(&p);
 	affichage();
   return 0;
 }
