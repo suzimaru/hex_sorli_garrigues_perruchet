@@ -1,7 +1,19 @@
 #include "victoire.h"
 
 
-Case tab_case[70];
+Case tab_case[121];
+
+void remplir_tab()
+{
+  int i;
+  for (i=0;i<=121;i++)
+  {
+  tab_case[i].coordonnee_Y = -1;
+  tab_case[i].coordonnee_X = -1;
+  tab_case[i].borne = 0;
+  tab_case[i].joueur = -1;
+  }
+}
 
 
 int lire_tab(int y , int x, Case plateau[11][11] )
@@ -24,6 +36,7 @@ void afficher_tab(int i)
       printf("tab_case[%d] x : %d  y :  %d \n",i,tab_case[i].coordonnee_X,tab_case[i].coordonnee_Y  );
   }
 }
+
 
 int nb_touche(Case plateau[11][11], int y, int x)
 // Compte le nombre de case adjacente d'une case du plateau donnée
@@ -157,6 +170,7 @@ Case trouver_case(Case plateau[11][11], int lvl_ligne, int lvl_colonne, int y,in
     if (lvl_colonne == 0 && !lire_tab(y,x-1,plateau)) {
       printf("test3\n");
       // if (plateau[y - 1][x].joueur == plateau[y][x].joueur)
+      printf("comparaison joueur : case : %d joueur : %d \n",plateau[y][x-1].joueur,plateau[y][x].joueur );
               if (plateau[y][x-1].joueur == plateau[y][x].joueur)
 
         {new_case = plateau[y][x-1];printf(" plateau[y][x-1] coordonnée : y %d x : %d joueur : %d \n",plateau[y][x-1].coordonnee_Y,plateau[y][x-1].coordonnee_X, plateau[y][x-1].joueur );  }
@@ -202,6 +216,7 @@ Case parcourir_case (Case plateau[11][11], int y, int x,int borne_up,int joueur_
   pion_adjacent.borne = 0;
   pion_adjacent.joueur = -1;
   int sortie =0;
+  printf("valeur case 0/0 : y : %d x : %d jooeuur : %d borne : %d \n",plateau[0][0].coordonnee_Y,plateau[0][0].coordonnee_X,plateau[0][0].joueur,plateau[0][0].borne );
 
 
   int nb_case_adjacente = nb_touche(plateau,y,x);
@@ -211,9 +226,9 @@ Case parcourir_case (Case plateau[11][11], int y, int x,int borne_up,int joueur_
   printf("valeur de i : %d \n",*i );
   // afficher_tab(*i);
 
-    for (lvl_ligne = 0; lvl_ligne <=2 && *end !=25 && sortie != 1 && nb_case_adjacente != 0 ; lvl_ligne++) {
+    for (lvl_ligne = 0; lvl_ligne <=2 && *end !=50 && sortie != 1 && nb_case_adjacente != 0 ; lvl_ligne++) {
 
-      for (lvl_colonne = 0; lvl_colonne <= 2 && *end != 25 && sortie != 1; lvl_colonne++) {
+      for (lvl_colonne = 0; lvl_colonne <= 2 && *end != 50 && sortie != 1; lvl_colonne++) {
       
         pion_adjacent = trouver_case(plateau, lvl_ligne, lvl_colonne, y, x);
         if(pion_adjacent.coordonnee_X!=-1 && pion_adjacent.coordonnee_Y!=-1 ) {tab_case[*i] = pion_adjacent; printf("tab_case[%d] = y %d  x  %d  \n",*i ,tab_case[*i].coordonnee_Y,tab_case[*i].coordonnee_X  );  *i=*i+1;}
@@ -221,16 +236,17 @@ Case parcourir_case (Case plateau[11][11], int y, int x,int borne_up,int joueur_
         printf("pion_adjacent y : %d x:%d borne : %d joueur : %d \n",pion_adjacent.coordonnee_Y,pion_adjacent.coordonnee_X,pion_adjacent.borne,pion_adjacent.joueur );
         printf("borne up : %d borne pion : %d finis : %d \n",borne_up,pion_adjacent.borne,*end );
         if (pion_adjacent.borne==borne_up) sortie=1;
-        if (pion_adjacent.joueur == joueur_up && pion_adjacent.borne != borne_up && *end !=25 && sortie != 1)
+        if (pion_adjacent.joueur == joueur_up && pion_adjacent.borne != borne_up && *end !=50 && sortie != 1)
           {         
                   *end=*end+1;
+
+                  // remplir_tab();
 return(parcourir_case(plateau, pion_adjacent.coordonnee_Y,
                               pion_adjacent.coordonnee_X,borne_up,joueur_up,end,i));}
         
       }
     }
   
-          printf("pion_adjacent retourné y : %d x:%d borne : %d joueur : %d \n",pion_adjacent.coordonnee_Y,pion_adjacent.coordonnee_X,pion_adjacent.borne,pion_adjacent.joueur );
 
   return (pion_adjacent);
 
@@ -260,7 +276,6 @@ int deplacement_plateau(Case plateau[11][11], int y, int x, int borne) {
   int borne_up;
   printf("------> deplacement\n");
 
-  printf("case du plateau déplacement : y :%d  x : %d  borne : %d joueur : %d \n",plateau[y][x].coordonnee_Y,plateau[y][x].coordonnee_X,plateau[y][x].borne,plateau[y][x].joueur );
 
   int joueur_up=plateau[y][x].joueur;
   int i=0;
@@ -363,6 +378,7 @@ int victoire(int joueur, pile *p, Case plateau[11][11]) {
   int fin = 0;
 
   int borne_op;
+  remplir_tab();
 
   
 

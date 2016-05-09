@@ -19,6 +19,7 @@ typedef struct Pion_s
 
 } Case;
 
+void remplir_tab();
 int lire_tab(int y , int x, Case plateau[11][11] );
 void afficher_tab(int i);
 int nb_touche( Case plateau[11][11] ,int y,int x);
