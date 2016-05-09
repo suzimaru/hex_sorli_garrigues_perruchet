@@ -30,13 +30,13 @@ SDL_Surface *ecran, *texte1, *texte_menu, *texte_auteur, *jouer, *charger,
     *quitter, *image_fond, *HvsH, *HvsIA1, *HvsIA2, *IAvsIA, *retour,
     *niveau_premier_IA, *niveau_deuxieme_IA, *niveau, *PLATEAU, *pion_bleu, *pion_rouge,
     *sauvegarder, *undo, *enum_save, *pion_annule, *arriere, *info_joueur, *info_coup, *cacheur, *info_pion, 
-    *vic, *cacheur2 ;
+    *vic, *cacheur2, *abandon ;
 
 SDL_Rect position_fond, posTexte1, posTexte_menu, posTexte_auteur, posJouer,
     posCharger, posQuitter, posHvsH, posHvsIA1, posHvsIA2, posIAvsIA, posretour,
     posNiveau, pos1IA, pos2IA, posPlateau, pos_Pion, 
     posUndo, pos_enum_save, posSauvegarder, pos_Arriere, pos_info_joueur, pos_info_coup, pos_cacheur, pos_info_pion,
-    pos_cacheur2, pos_victoire;
+    pos_cacheur2, pos_victoire, pos_abandon;
 
 Dimensions fenetre; // main window
 

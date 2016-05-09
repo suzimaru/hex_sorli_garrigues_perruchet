@@ -200,7 +200,8 @@ void affichage_menu(int menu) {
       quitter = TTF_RenderText_Blended(fontMenu, "Quitter", fontPurple);
       sauvegarder = TTF_RenderText_Blended(fontMenu, "Sauvegarder", fontPurple);
       undo = TTF_RenderText_Blended(fontMenu, "Undo", fontPurple);
-
+      abandon = TTF_RenderText_Blended(fontMenu, "Abandon", fontPurple);
+      retour = TTF_RenderText_Blended(fontMenu, "retour", fontPurple);
       SDL_BlitSurface(image_fond, NULL, ecran, &position_fond);
 
       Uint32 couleur_arriere = SDL_MapRGB(ecran->format, 102, 204, 204);
@@ -221,7 +222,13 @@ void affichage_menu(int menu) {
       posUndo.y = 160;
 
       posQuitter.x = 545;
-      posQuitter.y = 240;
+      posQuitter.y = 400;
+
+      posretour.x=545;
+      posretour.y=320;
+
+      pos_abandon.x=545;
+      pos_abandon.y=240;
 
       if (nb_joueur == 0)
         info_joueur =
@@ -240,6 +247,8 @@ void affichage_menu(int menu) {
       SDL_BlitSurface(sauvegarder, NULL, ecran, &posSauvegarder);
       SDL_BlitSurface(undo, NULL, ecran, &posUndo);
       SDL_BlitSurface(quitter, NULL, ecran, &posQuitter);
+      SDL_BlitSurface(retour,NULL,ecran,&posretour);
+      SDL_BlitSurface(abandon,NULL,ecran,&pos_abandon);
       SDL_BlitSurface(cacheur2, NULL, ecran, &pos_cacheur2);
       SDL_Flip(ecran);
 
@@ -279,21 +288,24 @@ void affichage_menu(int menu) {
       TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
       SDL_Color fontPurple = {0, 51, 102};
       
-      posretour.x = 185;
-      posretour.y = 520;
+      posretour.x = 80;
+      posretour.y = 525;
       retour = TTF_RenderText_Blended(fontMenu, "Retour", fontPurple);
       SDL_BlitSurface(retour, NULL, ecran, &posretour);
 
-      pos_victoire.x=100;
+      pos_victoire.x=215;
       pos_victoire.y=20;
-      vic = TTF_RenderText_Blended(fontMenu, "victoire !", fontPurple);
+      if (nb_joueur==0)
+      vic = TTF_RenderText_Blended(fontMenu, "victoire du joueur rouge !", fontPurple);
+    else
+      vic=TTF_RenderText_Blended(fontMenu, "victoire du joueur bleu !", fontPurple);
       SDL_BlitSurface(vic, NULL, ecran, &pos_victoire);
       SDL_BlitSurface(retour, NULL, ecran, &posretour);
 
 
       PLATEAU = IMG_Load("Images/victoire.jpg");
-      posPlateau.x=140;
-      posPlateau.y=115;
+      posPlateau.x=260;
+      posPlateau.y=70;
       SDL_BlitSurface(PLATEAU,NULL,ecran,&posPlateau);
       SDL_Flip(ecran);
       TTF_CloseFont(fontMenu);
@@ -337,6 +349,8 @@ void clean(int menu) {
       SDL_FreeSurface(quitter);
       SDL_FreeSurface(sauvegarder);
       SDL_FreeSurface(undo);
+      SDL_FreeSurface(abandon);
+      SDL_FreeSurface(retour);
 
       SDL_FreeSurface(pion_bleu);
       SDL_FreeSurface(pion_rouge);
@@ -357,6 +371,12 @@ void clean(int menu) {
       SDL_FreeSurface(niveau);
       // SDL_FreeSurface(enum_save);
       break;
+    }
+    case (6):
+    {
+      SDL_FreeSurface(retour);
+      SDL_FreeSurface(PLATEAU);
+      SDL_FreeSurface(vic);
     }
   }
 }
@@ -913,12 +933,6 @@ void affichage() {
   init(&p);
   Case plateau[11][11];
   init_plateau(plateau);
-  
-  // Initialisation du plateau pour le test de charger
-
-  // TEST POUR LA FONCTION CHARGER
-  // plateau[0][0].joueur = 1;
-  // plateau[1][0].joueur = 0;
 
   continuer = true;
   SDLKey key_pressed;
@@ -1035,6 +1049,9 @@ void affichage() {
                   printf("touche = %d\n",nb_touche(plateau,lig,col));
                   if (!fin)
                   {
+                    init(&p);
+                    init_plateau(plateau);
+                    annule=1;
                     clean(menu);
                     menu=6;
                     affichage_menu(menu);
@@ -1043,7 +1060,31 @@ void affichage() {
                   break;
                 }
                 if (clic_Valide(c, 540, 235, 720, 275)) {
-                  // QUITTER
+                  // ABANDON
+                  //if (nb_joueur==1) nb_joueur=0;
+                  //else if(nb_joueur==0) nb_joueur=1;
+                  clean(menu);
+                  menu=6;
+                  init_plateau(plateau);
+                  init(&p);
+                  annule=1;
+                  affichage_menu(menu);
+                  break;
+                }
+                if (clic_Valide(c,540,315,660,360))
+                {
+                  //RETOUR
+                  clean(menu);
+                  init_plateau(plateau);
+                  init(&p);
+                  menu=1;
+                  affichage_menu(menu);
+                  annule=1;
+                  break;
+                }
+                if (clic_Valide(c,540,395,670,445))
+                {
+                  //QUITTER
                   continuer = false;
                   clean(menu);
                   break;
@@ -1156,18 +1197,17 @@ void affichage() {
                     for (n = 0; n < 11; n++) {
                       plateau[k][n].coordonnee_Y = k;
                       plateau[k][n].coordonnee_X = n;
-                      if (k == 0 || n == 0) {
-                        plateau[k][n].borne = 1;
-                      } else if (k == 10 || n == 10) {
-                        plateau[k][n].borne = 2;
-                      } else {
-                        plateau[k][n].borne = 0;
-                      }
+                      // if (k == 0 || n == 0) {
+                      //   plateau[k][n].borne = 1;
+                      // } else if (k == 10 || n == 10) {
+                      //   plateau[k][n].borne = 2;
+                      // } else {
+                      //   plateau[k][n].borne = 0;
+                      // }
                       plateau[k][n].joueur = matrice[k][n];
-                      printf("i%d j%d joueur%d\n",k,n,matrice[k][n]);
+                      enregistre_coup(&p,k,n,matrice[k][n]);
                     }
                   }
-                  // METTRE LA FONCTION CHARGER ICI
                   clean(menu);
                   menu = 4;
                   affichage_menu(menu);
@@ -1185,15 +1225,16 @@ void affichage() {
                     for (n = 0; n < 11; n++) {
                       plateau[k][n].coordonnee_Y = k;
                       plateau[k][n].coordonnee_X = n;
-                      if (k == 0 || n == 0) {
-                        plateau[k][n].borne = 1;
-                      } else if (k == 10 || n == 10) {
-                        plateau[k][n].borne = 2;
-                      } else {
-                        plateau[k][n].borne = 0;
-                      }
+                      // if (k == 0 || n == 0) {
+                      //   plateau[k][n].borne = 1;
+                      // } else if (k == 10 || n == 10) {
+                      //   plateau[k][n].borne = 2;
+                      // } else {
+                      //   plateau[k][n].borne = 0;
+                      // }
                       plateau[k][n].joueur = matrice[k][n];
-                      printf("i%d j%d joueur%d\n",k,n,matrice[k][n]);
+                      enregistre_coup(&p,k,n,matrice[k][n]);
+                      affiche_pile(&p);
                     }
                   }
                   clean(menu);
@@ -1209,19 +1250,23 @@ void affichage() {
                   int matrice[11][11];
                   int k, n;
                   chargement(&p,&nb_joueur, matrice, name_save, &col, &lig);
+                  
                   affiche_pile(&p);
                   for (k = 0; k < 11; k++) {
                     for (n = 0; n < 11; n++) {
                       plateau[k][n].coordonnee_Y = k;
                       plateau[k][n].coordonnee_X = n;
-                      if (k == 0 || n == 0) {
-                        plateau[k][n].borne = 1;
-                      } else if (k == 10 || n == 10) {
-                        plateau[k][n].borne = 2;
-                      } else {
-                        plateau[k][n].borne = 0;
-                      }
+                      // if (k == 0 || n == 0) {
+                      //   plateau[k][n].borne = 1;
+                      // } else if (k == 10 || n == 10) {
+                      //   plateau[k][n].borne = 2;
+                      // } else {
+                      //   plateau[k][n].borne = 0;
+                      // }
                       plateau[k][n].joueur = matrice[k][n];
+                      if (plateau[k][n].joueur!=-1)
+                      {
+                      enregistre_coup(&p,k,n,matrice[k][n]);}
                     }
                   }
                   clean(menu);
@@ -1229,6 +1274,19 @@ void affichage() {
                   affichage_menu(menu);
                   Charge_plateau(&nb_pions, c, plateau, lig, col, &nb_joueur);
                   annule = 1;
+                  break;
+                }
+                break;
+              }
+              case (6):
+              {
+                if (clic_Valide(c,70,515,205,570))
+                {
+                  printf("retour\n");
+                  clean(menu);
+                  menu=1;
+                  init_plateau(plateau);
+                  affichage_menu(menu);
                   break;
                 }
                 break;

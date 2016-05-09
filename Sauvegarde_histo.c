@@ -43,6 +43,7 @@ void sauvegarde_fichier(char name_save[],pile *historique){
 
 	if (fichier ==	NULL){
 		printf("Impossible d'ouvrir ce fichier de sauvegarde\n");
+		exit(1);
 	}
 	
 	//initialisation du fichier de sauvegarde
@@ -112,10 +113,10 @@ void sauvegarde_fichier(char name_save[],pile *historique){
 
 void chargement(pile *p,int *joueur,int plateau[TAILLE_PLATEAU][TAILLE_PLATEAU],char name_save[],int *x,int *y){
 	
-	int i,j;
+	int i,j,n=0;
 	char pion;
 	element coup;
-	char fin_game[20]="\\Endgame\n";
+	char fin_game[20]="Endgame\n";
 	char position_courante[20];
 	/*Ouvrir le fichier de sauvegarde*/
 
@@ -126,6 +127,7 @@ void chargement(pile *p,int *joueur,int plateau[TAILLE_PLATEAU][TAILLE_PLATEAU],
 
 	if (fichier ==	NULL){
 		printf("Impossible d'ouvrir ce fichier de sauvegarde\n");
+		exit(1);
 	}
 
 
@@ -148,36 +150,28 @@ void chargement(pile *p,int *joueur,int plateau[TAILLE_PLATEAU][TAILLE_PLATEAU],
 	/*Parcourir le fichier pour trouver le debut de l'historique*/
 	fseek(fichier,278,SEEK_SET);
 	fgets(position_courante,20,fichier);
+	printf(" position : %s\n",position_courante );
 	while (strcmp(position_courante,fin_game)!=0 && feof(fichier)==0){
-		printf("charger : boucle ");
 		fscanf(fichier,"\\play %d %d %d",&coup.joueur,&coup.coordonnee_y,&coup.coordonnee_x);
 		coup.coordonnee_x=coup.coordonnee_x-1;
 		coup.coordonnee_y=coup.coordonnee_y-1;
+		if (n==0){
+			*joueur=coup.joueur;
+			*x=coup.coordonnee_x;
+			*y=coup.coordonnee_y;
+		}
 		printf("y %d x %d\n",coup.coordonnee_y,coup.coordonnee_x);
 		empiler_pile(p,coup);
+
 		printf("\\play %d %d %d\n",p->top->elt.joueur,p->top->elt.coordonnee_y-1,p->top->elt.coordonnee_x-1);
 		fgets(position_courante,20,fichier);
-		printf("%s",position_courante);
+		printf(" position : %s\n",position_courante );
+		n++;
 	}
-	
-	depiler(p);
-	depiler(p);
-	depiler(p);
-	
-	
 
-// Il faudra return le dernier pion joué (ligne, colonne, numero du joueur)
-// si vous testez avec la sauvegarde 2 (j'ai rentré les coordonnées à la main pour le dernier coup jouer) ça affiche les
-// bonnes infos 
-// quand on charge ça remplit pas la pile donc quand on sauvegarde une partie qu'on a changé aupréalablement, y a que les données 
-// qui ont été rentrées APRÈS la sauvegarde qui sont sauvegardées du coup ça marche pas vraiment faudrait que tu rajoutes une pile 
-// dans ta fonction chargement je pense
-	coup=sommet(p);
-
-	*joueur=coup.joueur;
-	*x=coup.coordonnee_x;
-	*y=coup.coordonnee_y;
-
+	if(!estVide(p)){
+		depiler(p);
+	}
 
 	fclose(fichier);
 
