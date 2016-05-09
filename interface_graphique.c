@@ -183,18 +183,18 @@ void affichage_menu(int menu) {
       position_fond.x = 0;
       position_fond.y = 0;
 
-      Uint32 couleur_cacheur = SDL_MapRGB(ecran->format, 102, 204, 204);
+      Uint32 couleur_cacheur = SDL_MapRGB(ecran->format, 204, 204, 255);
       pos_cacheur.x = 15;
       pos_cacheur.y = 75;
 
       pos_cacheur2.x = 15;
-      pos_cacheur2.y = 475;
+      pos_cacheur2.y = 465;
       cacheur = SDL_CreateRGBSurface(SDL_HWSURFACE, 235, 40, 32, 0, 0, 0, 0);
-      cacheur2 = SDL_CreateRGBSurface(SDL_HWSURFACE, 770, 80, 32, 0, 0, 0, 0);
+      cacheur2 = SDL_CreateRGBSurface(SDL_HWSURFACE, 600, 60, 32, 0, 0, 0, 0);
       SDL_FillRect(cacheur2, NULL, couleur_cacheur);
       SDL_FillRect(cacheur, NULL, couleur_cacheur);
-
-      PLATEAU = IMG_Load("Images/hex.png");
+      pion_annule = IMG_Load("Images/Undon.png");
+      PLATEAU = IMG_Load("Images/plateau.png");
       TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
       SDL_Color fontPurple = {0, 51, 102};
       quitter = TTF_RenderText_Blended(fontMenu, "Quitter", fontPurple);
@@ -203,15 +203,6 @@ void affichage_menu(int menu) {
       abandon = TTF_RenderText_Blended(fontMenu, "Abandon", fontPurple);
       retour = TTF_RenderText_Blended(fontMenu, "retour", fontPurple);
       SDL_BlitSurface(image_fond, NULL, ecran, &position_fond);
-
-      Uint32 couleur_arriere = SDL_MapRGB(ecran->format, 102, 204, 204);
-      pos_Arriere.x = 15;
-      pos_Arriere.y = 50;
-
-      arriere = SDL_CreateRGBSurface(SDL_HWSURFACE, 770, 500, 32, 0, 0, 0, 0);
-      SDL_FillRect(arriere, NULL, couleur_arriere);
-
-      SDL_BlitSurface(arriere, NULL, ecran, &pos_Arriere);
 
       SDL_BlitSurface(PLATEAU, NULL, ecran, &posPlateau);
 
@@ -242,7 +233,7 @@ void affichage_menu(int menu) {
 
       pos_info_coup.x = 15;
       pos_info_coup.y = 475;
-
+      SDL_BlitSurface(cacheur,NULL,ecran,&pos_cacheur);
       SDL_BlitSurface(info_joueur, NULL, ecran, &pos_info_joueur);
       SDL_BlitSurface(sauvegarder, NULL, ecran, &posSauvegarder);
       SDL_BlitSurface(undo, NULL, ecran, &posUndo);
@@ -346,30 +337,29 @@ void clean(int menu) {
       break;
     }
     case (4): {
-      SDL_FreeSurface(quitter);
-      SDL_FreeSurface(sauvegarder);
-      SDL_FreeSurface(undo);
-      SDL_FreeSurface(abandon);
-      SDL_FreeSurface(retour);
+      // SDL_FreeSurface(quitter);
+      // SDL_FreeSurface(sauvegarder);
+      // SDL_FreeSurface(undo);
+      // SDL_FreeSurface(abandon);
+      // SDL_FreeSurface(retour);
 
-      SDL_FreeSurface(pion_bleu);
-      SDL_FreeSurface(pion_rouge);
+      // SDL_FreeSurface(pion_bleu);
+      // SDL_FreeSurface(pion_rouge);
 
-      SDL_FreeSurface(PLATEAU);
-      SDL_FreeSurface(arriere);
-      SDL_FreeSurface(cacheur);
-      SDL_FreeSurface(cacheur2);
-      SDL_FreeSurface(info_coup);
-      SDL_FreeSurface(info_joueur);
-      SDL_FreeSurface(enum_save);
-      SDL_FreeSurface(pion_annule);
+      // SDL_FreeSurface(PLATEAU);
+      //SDL_FreeSurface(cacheur);
+      //SDL_FreeSurface(cacheur2);
+      // SDL_FreeSurface(info_coup);
+      // SDL_FreeSurface(info_joueur);
+      // SDL_FreeSurface(enum_save);
+      // SDL_FreeSurface(pion_annule);
 
       break;
     }
     case (5): {
       SDL_FreeSurface(retour);
       SDL_FreeSurface(niveau);
-      // SDL_FreeSurface(enum_save);
+      SDL_FreeSurface(enum_save);
       break;
     }
     case (6):
@@ -1146,7 +1136,7 @@ void affichage() {
                       depiler(&p);
                       plateau[lig][col].joueur = -1;
                       printf("joueur=%d\n", plateau[lig][col].joueur);
-                      pion_annule = IMG_Load("Images/Undo.png");
+                      // pion_annule = IMG_Load("Images/Undon.png");
                       SDL_BlitSurface(pion_annule, NULL, ecran, &pos_Pion);
 
                       nb_joueur = (nb_joueur - 1) % 2;
@@ -1197,15 +1187,17 @@ void affichage() {
                     for (n = 0; n < 11; n++) {
                       plateau[k][n].coordonnee_Y = k;
                       plateau[k][n].coordonnee_X = n;
-                      // if (k == 0 || n == 0) {
-                      //   plateau[k][n].borne = 1;
-                      // } else if (k == 10 || n == 10) {
-                      //   plateau[k][n].borne = 2;
-                      // } else {
-                      //   plateau[k][n].borne = 0;
-                      // }
-                      plateau[k][n].joueur = matrice[k][n];
-                      enregistre_coup(&p,k,n,matrice[k][n]);
+                      if (k == 0 || n == 0) {
+                        plateau[k][n].borne = 1;
+                      } else if (k == 10 || n == 10) {
+                        plateau[k][n].borne = 2;
+                      } else {
+                        plateau[k][n].borne = 0;
+                      }
+                      plateau[k][n].joueur=matrice[k][n];
+                     if (plateau[k][n].joueur!=-1)
+                      {
+                      enregistre_coup(&p,k,n,matrice[k][n]);}
                     }
                   }
                   clean(menu);
@@ -1225,16 +1217,17 @@ void affichage() {
                     for (n = 0; n < 11; n++) {
                       plateau[k][n].coordonnee_Y = k;
                       plateau[k][n].coordonnee_X = n;
-                      // if (k == 0 || n == 0) {
-                      //   plateau[k][n].borne = 1;
-                      // } else if (k == 10 || n == 10) {
-                      //   plateau[k][n].borne = 2;
-                      // } else {
-                      //   plateau[k][n].borne = 0;
-                      // }
-                      plateau[k][n].joueur = matrice[k][n];
-                      enregistre_coup(&p,k,n,matrice[k][n]);
-                      affiche_pile(&p);
+                      if (k == 0 || n == 0) {
+                        plateau[k][n].borne = 1;
+                      } else if (k == 10 || n == 10) {
+                        plateau[k][n].borne = 2;
+                      } else {
+                        plateau[k][n].borne = 0;
+                      }
+                      plateau[k][n].joueur=matrice[k][n];
+                      if (plateau[k][n].joueur!=-1)
+                      {
+                      enregistre_coup(&p,k,n,matrice[k][n]);}
                     }
                   }
                   clean(menu);
@@ -1256,13 +1249,13 @@ void affichage() {
                     for (n = 0; n < 11; n++) {
                       plateau[k][n].coordonnee_Y = k;
                       plateau[k][n].coordonnee_X = n;
-                      // if (k == 0 || n == 0) {
-                      //   plateau[k][n].borne = 1;
-                      // } else if (k == 10 || n == 10) {
-                      //   plateau[k][n].borne = 2;
-                      // } else {
-                      //   plateau[k][n].borne = 0;
-                      // }
+                      if (k == 0 || n == 0) {
+                        plateau[k][n].borne = 1;
+                      } else if (k == 10 || n == 10) {
+                        plateau[k][n].borne = 2;
+                      } else {
+                        plateau[k][n].borne = 0;
+                      }
                       plateau[k][n].joueur = matrice[k][n];
                       if (plateau[k][n].joueur!=-1)
                       {

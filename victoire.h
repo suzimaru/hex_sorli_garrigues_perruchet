@@ -19,9 +19,9 @@ typedef struct Pion_s
 
 } Case;
 
-void remplir_tab();
+void remplir_tab(Case tab_case[]);
 int lire_tab(int y , int x, Case plateau[11][11] );
-void afficher_tab(int i);
+void afficher_tab(int i,Case tab_case[]);
 int nb_touche( Case plateau[11][11] ,int y,int x);
 Case trouver_case( Case plateau[11][11] ,int lvl_ligne, int lvl_colonne,int y,int x);
 Case parcourir_case (Case plateau[11][11], int y, int x,int borne_up, int joueur_up,int *end, int *i);
