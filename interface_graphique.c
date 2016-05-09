@@ -273,6 +273,31 @@ void affichage_menu(int menu) {
 
       break;
     }
+    case (6):
+    {
+      SDL_BlitSurface(image_fond,NULL,ecran,&position_fond);
+      TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
+      SDL_Color fontPurple = {0, 51, 102};
+      
+      posretour.x = 185;
+      posretour.y = 520;
+      retour = TTF_RenderText_Blended(fontMenu, "Retour", fontPurple);
+      SDL_BlitSurface(retour, NULL, ecran, &posretour);
+
+      pos_victoire.x=100;
+      pos_victoire.y=20;
+      vic = TTF_RenderText_Blended(fontMenu, "victoire !", fontPurple);
+      SDL_BlitSurface(vic, NULL, ecran, &pos_victoire);
+      SDL_BlitSurface(retour, NULL, ecran, &posretour);
+
+
+      PLATEAU = IMG_Load("Images/victoire.jpg");
+      posPlateau.x=140;
+      posPlateau.y=115;
+      SDL_BlitSurface(PLATEAU,NULL,ecran,&posPlateau);
+      SDL_Flip(ecran);
+      TTF_CloseFont(fontMenu);
+    }
   }
 }
 
@@ -336,11 +361,11 @@ void clean(int menu) {
   }
 }
 
-void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
+int Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
            int *annule, Case plateau[11][11], pile *p) {
   TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
   SDL_Color fontPurple = {0, 51, 102};
-
+  int vic=1;
   int ancienne_lig = *lig;
   int ancienne_col = *col;
   int ajouer = 0;
@@ -629,7 +654,7 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
   }
 
   if (ajouer) {
-    jeux(*lig, *col, *nb_joueur, p, plateau);
+    vic=jeux(*lig, *col, *nb_joueur, p, plateau);
       printf("joué\n");
     printf("pions=%d\n", *nb_pions);
     SDL_BlitSurface(cacheur2, NULL, ecran, &pos_cacheur2);
@@ -661,7 +686,7 @@ void Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     SDL_BlitSurface(info_coup, NULL, ecran, &pos_info_coup);
     SDL_Flip(ecran);
   }
-  
+ return vic; 
 }
 
 void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11], int lig,
@@ -883,7 +908,7 @@ void affichage() {
   ///////////////////////////////////////////:
   int annule = 0;
   int sauvegarde = 0;
-  int lig, col;
+  int lig=0, col=0;
   pile p;
   init(&p);
   Case plateau[11][11];
@@ -1005,10 +1030,16 @@ void affichage() {
                 if (clic_Valide(c, 20, 145, 525, 450)) {
                   // PLATEAU
 
-                  Jouer(&nb_joueur, &nb_pions, c, &lig, &col, &annule, plateau, &p);
+                  int fin=Jouer(&nb_joueur, &nb_pions, c, &lig, &col, &annule, plateau, &p);
                   printf("lig %d col %d \n", lig, col);
                   printf("touche = %d\n",nb_touche(plateau,lig,col));
-                  
+                  if (!fin)
+                  {
+                    clean(menu);
+                    menu=6;
+                    affichage_menu(menu);
+                    break;
+                  }
                   break;
                 }
                 if (clic_Valide(c, 540, 235, 720, 275)) {
@@ -1104,6 +1135,7 @@ void affichage() {
                     }
                   }
                 }
+                break;
               }
               case (5): {
                 char *name_save;
@@ -1142,7 +1174,8 @@ void affichage() {
                   Charge_plateau(&nb_pions, c, plateau, lig, col, &nb_joueur);
                   annule = 1;
                   break;
-                } else if (clic_Valide(c, 320, 280, 445, 325)) {
+                } 
+                else if (clic_Valide(c, 320, 280, 445, 325)) {
                   printf("save 2\n");
                   name_save = "save_2";
                   int matrice[11][11];
@@ -1161,17 +1194,16 @@ void affichage() {
                       }
                       plateau[k][n].joueur = matrice[k][n];
                       printf("i%d j%d joueur%d\n",k,n,matrice[k][n]);
-
                     }
                   }
-                  // METTRE LA FONCTION CHARGER ICI
                   clean(menu);
                   menu = 4;
                   affichage_menu(menu);
                   Charge_plateau(&nb_pions, c, plateau, lig, col, &nb_joueur);
                   annule = 1;
                   break;
-                } else if (clic_Valide(c, 520, 280, 645, 325)) {
+                } 
+                else if (clic_Valide(c, 520, 280, 645, 325)) {
                   printf("save 3\n");
                   name_save = "save_3";
                   int matrice[11][11];
@@ -1192,7 +1224,6 @@ void affichage() {
                       plateau[k][n].joueur = matrice[k][n];
                     }
                   }
-                  // METTRE LA FONCTION CHARGER ICI
                   clean(menu);
                   menu = 4;
                   affichage_menu(menu);
@@ -1200,6 +1231,7 @@ void affichage() {
                   annule = 1;
                   break;
                 }
+                break;
               }
             }
           }

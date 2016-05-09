@@ -29,12 +29,14 @@ typedef struct { int x, y; } Clic;
 SDL_Surface *ecran, *texte1, *texte_menu, *texte_auteur, *jouer, *charger,
     *quitter, *image_fond, *HvsH, *HvsIA1, *HvsIA2, *IAvsIA, *retour,
     *niveau_premier_IA, *niveau_deuxieme_IA, *niveau, *PLATEAU, *pion_bleu, *pion_rouge,
-    *sauvegarder, *undo, *enum_save, *pion_annule, *arriere, *info_joueur, *info_coup, *cacheur, *info_pion, *cacheur2 ;
+    *sauvegarder, *undo, *enum_save, *pion_annule, *arriere, *info_joueur, *info_coup, *cacheur, *info_pion, 
+    *vic, *cacheur2 ;
 
 SDL_Rect position_fond, posTexte1, posTexte_menu, posTexte_auteur, posJouer,
     posCharger, posQuitter, posHvsH, posHvsIA1, posHvsIA2, posIAvsIA, posretour,
     posNiveau, pos1IA, pos2IA, posPlateau, pos_Pion, 
-    posUndo, pos_enum_save, posSauvegarder, pos_Arriere, pos_info_joueur, pos_info_coup, pos_cacheur, pos_info_pion, pos_cacheur2;
+    posUndo, pos_enum_save, posSauvegarder, pos_Arriere, pos_info_joueur, pos_info_coup, pos_cacheur, pos_info_pion,
+    pos_cacheur2, pos_victoire;
 
 Dimensions fenetre; // main window
 
@@ -45,6 +47,6 @@ int clic_Valide(Clic c, int borneInfX, int borneInfY, int borneSupX,
 void affichage();
 void clean(int menu);
 void affichage_menu(int menu);
-void Jouer (int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col, int *annule, Case plateau[11][11], pile *p);
+int Jouer (int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col, int *annule, Case plateau[11][11], pile *p);
 void Charge_plateau(int *nb_pions, Clic c,Case plateau[11][11],int lig,int col, int *nb_joueur);
 #endif
