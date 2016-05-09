@@ -1,20 +1,32 @@
 #include "interface_graphique.h"
 
-///////////////////////// METTRE ICI LA FONCTION RANDOM POUR LE PREMIER JOUEUR
+/* Auteur SORLI Suzanne
+Ce module est l'interface graphique, il gère tous les menus, tous les affichages de pion, et appelle les fonctionnalités
+correspondantes (dans les autres modules).
+Ce module nécéssite les différentes fonctionnalités appelées dans pendant exécution*/
 
 int nb_joueur;
 /////////////////////////////////////////////////////////////////
 
 int nb_pions = 0;
+
+/*Cette fonction vérifie si l'endroit du clic correspond à l'emplacement indiqué dans les paramètres.
+Clic c étant le clic, borneinfX et borneInfY étant les coordonnées du point en haut à gauche du rectangle
+BorneSupX et BorneSupY étant les coordonnées du point en bas à droite du rectangle
+Il renvoie un int booléen si le clic est dans le rectangle ou non.*/
 int clic_Valide(Clic c, int borneInfX, int borneInfY, int borneSupX,
                 int borneSupY) {
   return ((c.x >= borneInfX && c.x <= borneSupX) &&
           (c.y >= borneInfY && c.y <= borneSupY));
 }
 
+
+/*Cette fonction affiche le menu correspondant au numéro du menu associé.
+int menu est le numéro du menu*/
 void affichage_menu(int menu) {
   switch (menu) {
     case (1): {
+      //Menu principal
       posTexte1.x = 315;
       posTexte1.y = 60;
 
@@ -37,12 +49,11 @@ void affichage_menu(int menu) {
       posTexte_auteur.y = 540;
 
       TTF_Font *fontAuteur =
-          TTF_OpenFont("hacked/hacked.ttf", 22);  // police du menu
+          TTF_OpenFont("hacked/hacked.ttf", 22); 
       TTF_Font *fontMenu =
-          TTF_OpenFont("hacked/hacked.ttf", 40);  // police du menu
+          TTF_OpenFont("hacked/hacked.ttf", 40); 
 
-      SDL_Color fontPurple = {0, 51, 102};  // couleur du menu
-                                            // texte du petit rectangle
+      SDL_Color fontPurple = {0, 51, 102};  
 
       texte_auteur = TTF_RenderText_Blended(
           fontAuteur, "Garrigues, Perruchet, Sorli 2016", fontPurple);
@@ -62,7 +73,7 @@ void affichage_menu(int menu) {
       SDL_BlitSurface(quitter, NULL, ecran, &posQuitter);
       SDL_BlitSurface(
           texte1, NULL, ecran,
-          &posTexte1);  // celle la après pour qu'elle ne soit pas écrasée
+          &posTexte1); 
       SDL_BlitSurface(texte_menu, NULL, ecran, &posTexte_menu);
       SDL_BlitSurface(texte_auteur, NULL, ecran, &posTexte_auteur);
 
@@ -73,6 +84,7 @@ void affichage_menu(int menu) {
       break;
     }
     case (2): {
+      //Menu secondaire
       posQuitter.x = 335;
       posQuitter.y = 435;
 
@@ -101,13 +113,13 @@ void affichage_menu(int menu) {
       posretour.y = 365;
 
       TTF_Font *fontAuteur =
-          TTF_OpenFont("hacked/hacked.ttf", 22);  // police du menu
+          TTF_OpenFont("hacked/hacked.ttf", 22);  
       TTF_Font *fontMenu =
-          TTF_OpenFont("hacked/hacked.ttf", 40);  // police du menu
+          TTF_OpenFont("hacked/hacked.ttf", 40); 
 
-      SDL_Color fontPurple = {0, 51, 102};  // couleur du menu
+      SDL_Color fontPurple = {0, 51, 102};  
       texte1 = TTF_RenderText_Blended(fontMenu, "Jeu HEX",
-                                      fontPurple);  // texte du petit rectangle
+                                      fontPurple);  
       HvsH = TTF_RenderText_Blended(fontMenu, "Humain VS Humain", fontPurple);
       HvsIA1 = TTF_RenderText_Blended(fontMenu, "Humain VS IA1", fontPurple);
       HvsIA2 = TTF_RenderText_Blended(fontMenu, "Humain VS IA2", fontPurple);
@@ -141,6 +153,7 @@ void affichage_menu(int menu) {
       break;
     }
     case (3): {
+      //Menu du choix du niveau de l'IA
       posNiveau.x = 140;
       posNiveau.y = 65;
 
@@ -154,8 +167,8 @@ void affichage_menu(int menu) {
       posretour.y = 475;
 
       TTF_Font *fontMenu =
-          TTF_OpenFont("hacked/hacked.ttf", 40);  // police du menu
-      SDL_Color fontPurple = {0, 51, 102};        // couleur du menu
+          TTF_OpenFont("hacked/hacked.ttf", 40); 
+      SDL_Color fontPurple = {0, 51, 102};       
 
       niveau = TTF_RenderText_Blended(fontMenu, "Quel est le niveau des IA ?",
                                       fontPurple);
@@ -177,6 +190,7 @@ void affichage_menu(int menu) {
       break;
     }
     case (4): {
+      //Fenetre de jeu avec le plateau et les fonctionnalités associées
       posPlateau.x = 15;
       posPlateau.y = 140;
 
@@ -215,11 +229,11 @@ void affichage_menu(int menu) {
       posQuitter.x = 545;
       posQuitter.y = 400;
 
-      posretour.x=545;
-      posretour.y=320;
+      posretour.x = 545;
+      posretour.y = 320;
 
-      pos_abandon.x=545;
-      pos_abandon.y=240;
+      pos_abandon.x = 545;
+      pos_abandon.y = 240;
 
       if (nb_joueur == 0)
         info_joueur =
@@ -233,13 +247,13 @@ void affichage_menu(int menu) {
 
       pos_info_coup.x = 15;
       pos_info_coup.y = 475;
-      SDL_BlitSurface(cacheur,NULL,ecran,&pos_cacheur);
+      SDL_BlitSurface(cacheur, NULL, ecran, &pos_cacheur);
       SDL_BlitSurface(info_joueur, NULL, ecran, &pos_info_joueur);
       SDL_BlitSurface(sauvegarder, NULL, ecran, &posSauvegarder);
       SDL_BlitSurface(undo, NULL, ecran, &posUndo);
       SDL_BlitSurface(quitter, NULL, ecran, &posQuitter);
-      SDL_BlitSurface(retour,NULL,ecran,&posretour);
-      SDL_BlitSurface(abandon,NULL,ecran,&pos_abandon);
+      SDL_BlitSurface(retour, NULL, ecran, &posretour);
+      SDL_BlitSurface(abandon, NULL, ecran, &pos_abandon);
       SDL_BlitSurface(cacheur2, NULL, ecran, &pos_cacheur2);
       SDL_Flip(ecran);
 
@@ -247,6 +261,7 @@ void affichage_menu(int menu) {
       break;
     }
     case (5): {
+      //Sous menu pour le choix de la sauvegarde à restaurer
       SDL_BlitSurface(image_fond, NULL, ecran, &position_fond);
       TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
       SDL_Color fontPurple = {0, 51, 102};
@@ -273,37 +288,40 @@ void affichage_menu(int menu) {
 
       break;
     }
-    case (6):
-    {
-      SDL_BlitSurface(image_fond,NULL,ecran,&position_fond);
+    case (6): {
+      //Fenetre du score - Victoire
+      SDL_BlitSurface(image_fond, NULL, ecran, &position_fond);
       TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
       SDL_Color fontPurple = {0, 51, 102};
-      
+
       posretour.x = 80;
       posretour.y = 525;
       retour = TTF_RenderText_Blended(fontMenu, "Retour", fontPurple);
       SDL_BlitSurface(retour, NULL, ecran, &posretour);
 
-      pos_victoire.x=215;
-      pos_victoire.y=20;
-      if (nb_joueur==0)
-      vic = TTF_RenderText_Blended(fontMenu, "victoire du joueur rouge !", fontPurple);
-    else
-      vic=TTF_RenderText_Blended(fontMenu, "victoire du joueur bleu !", fontPurple);
+      pos_victoire.x = 215;
+      pos_victoire.y = 20;
+      if (nb_joueur == 0)
+        vic = TTF_RenderText_Blended(fontMenu, "victoire du joueur rouge !",
+                                     fontPurple);
+      else
+        vic = TTF_RenderText_Blended(fontMenu, "victoire du joueur bleu !",
+                                     fontPurple);
       SDL_BlitSurface(vic, NULL, ecran, &pos_victoire);
       SDL_BlitSurface(retour, NULL, ecran, &posretour);
 
-
       PLATEAU = IMG_Load("Images/victoire.jpg");
-      posPlateau.x=260;
-      posPlateau.y=70;
-      SDL_BlitSurface(PLATEAU,NULL,ecran,&posPlateau);
+      posPlateau.x = 260;
+      posPlateau.y = 70;
+      SDL_BlitSurface(PLATEAU, NULL, ecran, &posPlateau);
       SDL_Flip(ecran);
       TTF_CloseFont(fontMenu);
     }
   }
 }
 
+/*Cette fonction nettoie les surfaces selon le menu
+int menu est le numéro du menu*/
 void clean(int menu) {
   switch (menu) {
     case (1): {
@@ -337,22 +355,19 @@ void clean(int menu) {
       break;
     }
     case (4): {
-      // SDL_FreeSurface(quitter);
-      // SDL_FreeSurface(sauvegarder);
-      // SDL_FreeSurface(undo);
-      // SDL_FreeSurface(abandon);
-      // SDL_FreeSurface(retour);
+      SDL_FreeSurface(quitter);
+      SDL_FreeSurface(sauvegarder);
+      SDL_FreeSurface(undo);
+      SDL_FreeSurface(abandon);
+      SDL_FreeSurface(retour);
 
-      // SDL_FreeSurface(pion_bleu);
-      // SDL_FreeSurface(pion_rouge);
+      SDL_FreeSurface(pion_bleu);
+      SDL_FreeSurface(pion_rouge);
 
-      // SDL_FreeSurface(PLATEAU);
-      //SDL_FreeSurface(cacheur);
-      //SDL_FreeSurface(cacheur2);
-      // SDL_FreeSurface(info_coup);
-      // SDL_FreeSurface(info_joueur);
-      // SDL_FreeSurface(enum_save);
-      // SDL_FreeSurface(pion_annule);
+      SDL_FreeSurface(PLATEAU);
+     /* SDL_FreeSurface(info_coup);
+      SDL_FreeSurface(info_joueur);*/
+      SDL_FreeSurface(pion_annule);
 
       break;
     }
@@ -362,8 +377,7 @@ void clean(int menu) {
       SDL_FreeSurface(enum_save);
       break;
     }
-    case (6):
-    {
+    case (6): {
       SDL_FreeSurface(retour);
       SDL_FreeSurface(PLATEAU);
       SDL_FreeSurface(vic);
@@ -371,11 +385,20 @@ void clean(int menu) {
   }
 }
 
+/*Cette fonction fait jouer le joueur, permet de rajouter les pions en SDL, convertit les clics de la souris en 
+int pour la ligne et la colonne, met à jour la pile pour l'historique de la partie, et renvoie un int booléen selon
+l'état de la partie (victoire ou non)
+
+nb_joueur est le numéro du joueur, nb_pion est le nombre de pion présents sur le plateau, Clic c est le clic récupéré par le
+logiciel pour faire jouer le joueur, lig et col sont les résultats de la conversion du clic en coordonnées d'un pion.
+annule est une variable qui sera mis à jour si on joue ou non. Si on a joué il sera possible d'annuler son coup, sinon on met
+annule à 0 pour interdir le joueur de Undo. Le plateau va être modifié puisqu'on va rajouter les pions dans l'affichage en 
+fonction du plateau que l'on modifie aussi grace à col et lig. p est la pile qui sera aussi modifiée afin de gérer l'historique.*/
 int Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
-           int *annule, Case plateau[11][11], pile *p) {
+          int *annule, Case plateau[11][11], pile *p) {
   TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
   SDL_Color fontPurple = {0, 51, 102};
-  int vic=1;
+  int vic = 1;
   int ancienne_lig = *lig;
   int ancienne_col = *col;
   int ajouer = 0;
@@ -664,9 +687,7 @@ int Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
   }
 
   if (ajouer) {
-    vic=jeux(*lig, *col, *nb_joueur, p, plateau);
-      printf("joué\n");
-    printf("pions=%d\n", *nb_pions);
+    vic = jeux(*lig, *col, *nb_joueur, p, plateau);
     SDL_BlitSurface(cacheur2, NULL, ecran, &pos_cacheur2);
     if (*nb_pions != 0) {
       char char_coup[100] = "";
@@ -675,13 +696,11 @@ int Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
       if (*nb_joueur == 1) {
         sprintf(char_coup, "Le joueur bleu a joue en %d,%d", (*lig) + 1,
                 (*col) + 1);
-        printf("%s\n", char_coup);
         info_coup = TTF_RenderText_Blended(fontMenu, char_coup, fontPurple);
         SDL_BlitSurface(info_coup, NULL, ecran, &pos_info_coup);
       } else if (*nb_joueur == 0) {
         sprintf(char_coup, "Le joueur rouge a joue en %d,%d", (*lig) + 1,
                 (*col) + 1);
-        printf("%s\n", char_coup);
         info_coup = TTF_RenderText_Blended(fontMenu, char_coup, fontPurple);
         SDL_BlitSurface(info_coup, NULL, ecran, &pos_info_coup);
       }
@@ -696,7 +715,7 @@ int Jouer(int *nb_joueur, int *nb_pions, Clic c, int *lig, int *col,
     SDL_BlitSurface(info_coup, NULL, ecran, &pos_info_coup);
     SDL_Flip(ecran);
   }
- return vic; 
+  return vic;
 }
 
 void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11], int lig,
@@ -856,12 +875,10 @@ void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11], int lig,
     // echange des joueurs car on l'incrémente avant
     if (*nb_joueur == 1) {
       sprintf(char_coup, "Le joueur rouge a joue en %d,%d", lig + 1, col + 1);
-      printf("%s\n", char_coup);
       info_coup = TTF_RenderText_Blended(fontMenu, char_coup, fontPurple);
       SDL_BlitSurface(info_coup, NULL, ecran, &pos_info_coup);
     } else if (*nb_joueur == 0) {
       sprintf(char_coup, "Le joueur bleu a joue en %d,%d", lig + 1, col + 1);
-      printf("%s\n", char_coup);
       info_coup = TTF_RenderText_Blended(fontMenu, char_coup, fontPurple);
       SDL_BlitSurface(info_coup, NULL, ecran, &pos_info_coup);
     }
@@ -870,6 +887,7 @@ void Charge_plateau(int *nb_pions, Clic c, Case plateau[11][11], int lig,
   *nb_joueur = (*nb_joueur + 1) % 2;
 }
 
+/*Ce sous programme gère le logiciel en appelant toutes les fonctionnalités associées.*/
 void affichage() {
   ////////////////////////////////////// DECLARATION
   //////////////////////////////////////////////
@@ -881,11 +899,10 @@ void affichage() {
 
   Uint8 video_bpp = 32;
   Uint32 videoflags = SDL_HWSURFACE;
-  
+
   bool continuer;
   SDL_Event event;
   nb_joueur = choix_joueur();
-  printf("joueur =%d\n",nb_joueur);
   ///////////////////////////////////////// INITIALISATION
   /////////////////////////////////////////
 
@@ -908,8 +925,7 @@ void affichage() {
 
   image_fond = IMG_Load("Images/image_fond.png");
 
-  // voir pour l'icone de la fenêtre
-  SDL_WM_SetCaption("Jeu de Hex", NULL);  // titre de la fenêtre
+  SDL_WM_SetCaption("Jeu de Hex", NULL);
 
   TTF_Init();
   SDL_BlitSurface(image_fond, NULL, ecran, &position_fond);
@@ -918,7 +934,7 @@ void affichage() {
   ///////////////////////////////////////////:
   int annule = 0;
   int sauvegarde = 0;
-  int lig=0, col=0;
+  int lig = 0, col = 0;
   pile p;
   init(&p);
   Case plateau[11][11];
@@ -935,11 +951,7 @@ void affichage() {
           if (event.button.button == SDL_BUTTON_LEFT) {
             Clic c;
             c.x = event.motion.x;
-            c.y = event.motion.y;
-            printf("X=%d Y=%d\n", c.x,
-                   c.y);  // on récupère les coordonnées du clic
-
-            // if ((clicX>=400  && clicX<=600) && (clicY>=180 && clicY<=250))
+            c.y = event.motion.y;           
             switch (menu) {
               ////////////////////////////////////// MENU PRINCIPAL
               ////////////////////////////////////////////////
@@ -957,7 +969,6 @@ void affichage() {
                   break;
                 } else if (clic_Valide(c, 315, 340, 470, 385)) {
                   // Charger
-                  printf("charger\n");
                   clean(menu);
                   menu = 5;
                   affichage_menu(menu);
@@ -987,10 +998,8 @@ void affichage() {
                   break;
                 } else if (clic_Valide(c, 250, 150, 550, 190)) {
                   // H VS H
-                  printf("Humain vs Humain\n");
-                  // H VS IA2
                   clean(menu);
-                  menu = menu + 2;
+                  menu = 4;
                   affichage_menu(menu);
                   break;
                 } else if (clic_Valide(c, 275, 225, 500, 265)) {
@@ -1010,7 +1019,7 @@ void affichage() {
                 if (clic_Valide(c, 160, 470, 285, 515)) {
                   // RETOUR
                   clean(menu);
-                  --menu;
+                  menu=2;
                   affichage_menu(menu);
                 }
                 break;
@@ -1021,7 +1030,6 @@ void affichage() {
                 TTF_Font *fontMenu = TTF_OpenFont("hacked/hacked.ttf", 40);
                 SDL_Color fontPurple = {0, 51, 102};
                 SDL_BlitSurface(cacheur, NULL, ecran, &pos_cacheur);
-                printf("joueur %d \n", nb_joueur);
                 if (nb_joueur == 0)
                   info_joueur = TTF_RenderText_Blended(fontMenu, "Joueur Bleu",
                                                        fontPurple);
@@ -1034,16 +1042,14 @@ void affichage() {
                 if (clic_Valide(c, 20, 145, 525, 450)) {
                   // PLATEAU
 
-                  int fin=Jouer(&nb_joueur, &nb_pions, c, &lig, &col, &annule, plateau, &p);
-                  printf("lig %d col %d \n", lig, col);
-                  printf("touche = %d\n",nb_touche(plateau,lig,col));
-                  if (!fin)
-                  {
+                  int fin = Jouer(&nb_joueur, &nb_pions, c, &lig, &col, &annule,
+                                  plateau, &p);
+                  if (!fin) {
                     init(&p);
                     init_plateau(plateau);
-                    annule=1;
+                    annule = 1;
                     clean(menu);
-                    menu=6;
+                    menu = 6;
                     affichage_menu(menu);
                     break;
                   }
@@ -1051,30 +1057,26 @@ void affichage() {
                 }
                 if (clic_Valide(c, 540, 235, 720, 275)) {
                   // ABANDON
-                  //if (nb_joueur==1) nb_joueur=0;
-                  //else if(nb_joueur==0) nb_joueur=1;
                   clean(menu);
-                  menu=6;
+                  menu = 6;
                   init_plateau(plateau);
                   init(&p);
-                  annule=1;
+                  annule = 1;
                   affichage_menu(menu);
                   break;
                 }
-                if (clic_Valide(c,540,315,660,360))
-                {
-                  //RETOUR
+                if (clic_Valide(c, 540, 315, 660, 360)) {
+                  // RETOUR
                   clean(menu);
                   init_plateau(plateau);
                   init(&p);
-                  menu=1;
+                  menu = 1;
                   affichage_menu(menu);
-                  annule=1;
+                  annule = 1;
                   break;
                 }
-                if (clic_Valide(c,540,395,670,445))
-                {
-                  //QUITTER
+                if (clic_Valide(c, 540, 395, 670, 445)) {
+                  // QUITTER
                   continuer = false;
                   clean(menu);
                   break;
@@ -1123,22 +1125,16 @@ void affichage() {
                   SDL_Flip(ecran);
                   sauvegarde = 0;
                   sauvegarde_fichier(name_save, &p);
-                  affiche_pile(&p);
                   break;
                 }
 
                 if (clic_Valide(c, 540, 155, 645, 200)) {
                   // UNDO
-
                   if (!annule) {
                     if (nb_pions != 0) {
-                      printf("lig=%d col=%d\n", lig, col);
                       depiler(&p);
                       plateau[lig][col].joueur = -1;
-                      printf("joueur=%d\n", plateau[lig][col].joueur);
-                      // pion_annule = IMG_Load("Images/Undon.png");
                       SDL_BlitSurface(pion_annule, NULL, ecran, &pos_Pion);
-
                       nb_joueur = (nb_joueur - 1) % 2;
                       nb_pions--;
                       SDL_BlitSurface(cacheur, NULL, ecran, &pos_cacheur);
@@ -1178,73 +1174,10 @@ void affichage() {
                 }
 
                 if (clic_Valide(c, 120, 280, 250, 330)) {
-                  printf("save 1\n");
                   name_save = "save_1";
                   int matrice[11][11];
                   int k, n;
-                  chargement(&p,&nb_joueur, matrice, name_save, &col, &lig);
-                  for (k = 0; k < 11; k++) {
-                    for (n = 0; n < 11; n++) {
-                      plateau[k][n].coordonnee_Y = k;
-                      plateau[k][n].coordonnee_X = n;
-                      if (k == 0 || n == 0) {
-                        plateau[k][n].borne = 1;
-                      } else if (k == 10 || n == 10) {
-                        plateau[k][n].borne = 2;
-                      } else {
-                        plateau[k][n].borne = 0;
-                      }
-                      plateau[k][n].joueur=matrice[k][n];
-                     if (plateau[k][n].joueur!=-1)
-                      {
-                      enregistre_coup(&p,k,n,matrice[k][n]);}
-                    }
-                  }
-                  clean(menu);
-                  menu = 4;
-                  affichage_menu(menu);
-                  Charge_plateau(&nb_pions, c, plateau, lig, col, &nb_joueur);
-                  annule = 1;
-                  break;
-                } 
-                else if (clic_Valide(c, 320, 280, 445, 325)) {
-                  printf("save 2\n");
-                  name_save = "save_2";
-                  int matrice[11][11];
-                  int k, n;
-                  chargement(&p,&nb_joueur, matrice, name_save, &col, &lig);
-                  for (k = 0; k < 11; k++) {
-                    for (n = 0; n < 11; n++) {
-                      plateau[k][n].coordonnee_Y = k;
-                      plateau[k][n].coordonnee_X = n;
-                      if (k == 0 || n == 0) {
-                        plateau[k][n].borne = 1;
-                      } else if (k == 10 || n == 10) {
-                        plateau[k][n].borne = 2;
-                      } else {
-                        plateau[k][n].borne = 0;
-                      }
-                      plateau[k][n].joueur=matrice[k][n];
-                      if (plateau[k][n].joueur!=-1)
-                      {
-                      enregistre_coup(&p,k,n,matrice[k][n]);}
-                    }
-                  }
-                  clean(menu);
-                  menu = 4;
-                  affichage_menu(menu);
-                  Charge_plateau(&nb_pions, c, plateau, lig, col, &nb_joueur);
-                  annule = 1;
-                  break;
-                } 
-                else if (clic_Valide(c, 520, 280, 645, 325)) {
-                  printf("save 3\n");
-                  name_save = "save_3";
-                  int matrice[11][11];
-                  int k, n;
-                  chargement(&p,&nb_joueur, matrice, name_save, &col, &lig);
-                  
-                  affiche_pile(&p);
+                  chargement(&p, &nb_joueur, matrice, name_save, &col, &lig);
                   for (k = 0; k < 11; k++) {
                     for (n = 0; n < 11; n++) {
                       plateau[k][n].coordonnee_Y = k;
@@ -1257,9 +1190,65 @@ void affichage() {
                         plateau[k][n].borne = 0;
                       }
                       plateau[k][n].joueur = matrice[k][n];
-                      if (plateau[k][n].joueur!=-1)
-                      {
-                      enregistre_coup(&p,k,n,matrice[k][n]);}
+                      if (plateau[k][n].joueur != -1) {
+                        enregistre_coup(&p, k, n, matrice[k][n]);
+                      }
+                    }
+                  }
+                  clean(menu);
+                  menu = 4;
+                  affichage_menu(menu);
+                  Charge_plateau(&nb_pions, c, plateau, lig, col, &nb_joueur);
+                  annule = 1;
+                  break;
+                } else if (clic_Valide(c, 320, 280, 445, 325)) {
+                  name_save = "save_2";
+                  int matrice[11][11];
+                  int k, n;
+                  chargement(&p, &nb_joueur, matrice, name_save, &col, &lig);
+                  for (k = 0; k < 11; k++) {
+                    for (n = 0; n < 11; n++) {
+                      plateau[k][n].coordonnee_Y = k;
+                      plateau[k][n].coordonnee_X = n;
+                      if (k == 0 || n == 0) {
+                        plateau[k][n].borne = 1;
+                      } else if (k == 10 || n == 10) {
+                        plateau[k][n].borne = 2;
+                      } else {
+                        plateau[k][n].borne = 0;
+                      }
+                      plateau[k][n].joueur = matrice[k][n];
+                      if (plateau[k][n].joueur != -1) {
+                        enregistre_coup(&p, k, n, matrice[k][n]);
+                      }
+                    }
+                  }
+                  clean(menu);
+                  menu = 4;
+                  affichage_menu(menu);
+                  Charge_plateau(&nb_pions, c, plateau, lig, col, &nb_joueur);
+                  annule = 1;
+                  break;
+                } else if (clic_Valide(c, 520, 280, 645, 325)) {
+                  name_save = "save_3";
+                  int matrice[11][11];
+                  int k, n;
+                  chargement(&p, &nb_joueur, matrice, name_save, &col, &lig);
+                  for (k = 0; k < 11; k++) {
+                    for (n = 0; n < 11; n++) {
+                      plateau[k][n].coordonnee_Y = k;
+                      plateau[k][n].coordonnee_X = n;
+                      if (k == 0 || n == 0) {
+                        plateau[k][n].borne = 1;
+                      } else if (k == 10 || n == 10) {
+                        plateau[k][n].borne = 2;
+                      } else {
+                        plateau[k][n].borne = 0;
+                      }
+                      plateau[k][n].joueur = matrice[k][n];
+                      if (plateau[k][n].joueur != -1) {
+                        enregistre_coup(&p, k, n, matrice[k][n]);
+                      }
                     }
                   }
                   clean(menu);
@@ -1271,14 +1260,13 @@ void affichage() {
                 }
                 break;
               }
-              case (6):
-              {
-                if (clic_Valide(c,70,515,205,570))
-                {
-                  printf("retour\n");
+              case (6): {
+                if (clic_Valide(c, 70, 515, 205, 570)) {
+                  //RETOUR
                   clean(menu);
-                  menu=1;
+                  menu = 1;
                   init_plateau(plateau);
+                  init(&p);
                   affichage_menu(menu);
                   break;
                 }
@@ -1288,9 +1276,9 @@ void affichage() {
           }
         }
         case SDL_KEYDOWN:
-          key_pressed = event.key.keysym.sym;  // on récupère la touche
+          key_pressed = event.key.keysym.sym;
           switch (key_pressed) {
-            case SDLK_ESCAPE: /* Esc keypress quits the app... */
+            case SDLK_ESCAPE:
               continuer = false;
               break;
             default:

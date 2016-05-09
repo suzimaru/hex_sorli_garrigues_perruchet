@@ -1,142 +1,118 @@
 #include "victoire.h"
 
+// Ce programme vérifie tout d'abord s'il y a bien un pion à chaque borne, puis pars de la dernière case joué pour aller à sa borne opposé,
+// tout en vérifiant le chemin parcourus.
 
-Case tab_case[121];
+Case tab_case[121];               // Tableau qui contient toute les cases que l'on à traversé durant la partie
 
-Case tab_adjacente[121];
+Case tab_adjacente[121];          // Tableau qui contiens toutes les cases que l'on à traversé qui ont au moins 3 pions pion adjacent.
 
-void remplir_tab(Case tab_case[])
-{
+void remplir_tab(Case tab_case[]) {
   int i;
-  for (i=0;i<=121;i++)
-  {
-  tab_case[i].coordonnee_Y = -1;
-  tab_case[i].coordonnee_X = -1;
-  tab_case[i].borne = 0;
-  tab_case[i].joueur = -1;
+  for (i = 0; i <= 121; i++) {
+    tab_case[i].coordonnee_Y = -1;
+    tab_case[i].coordonnee_X = -1;
+    tab_case[i].borne = 0;
+    tab_case[i].joueur = -1;
   }
 }
 
-
-int lire_tab(int y , int x, Case plateau[11][11] )
-{
+int lire_tab(int y, int x, Case plateau[11][11]) {
   int i;
-  int vrai=0;
-  for (i=0; i <70 && (tab_case[i].joueur!=0 || tab_case[i].joueur!=1);i++ )
-  {
-    if(tab_case[i].coordonnee_X==plateau[y][x].coordonnee_X && tab_case[i].coordonnee_Y==plateau[y][x].coordonnee_Y)
-      vrai=1;
+  int vrai = 0;
+  for (i = 0; i < 70 && (tab_case[i].joueur != 0 || tab_case[i].joueur != 1);
+       i++) {
+    if (tab_case[i].coordonnee_X == plateau[y][x].coordonnee_X &&
+        tab_case[i].coordonnee_Y == plateau[y][x].coordonnee_Y)
+      vrai = 1;
   }
-  printf("vrai lire tab : %d \n",vrai );
-  return(vrai);
+  return (vrai);
 }
 
-void afficher_tab(int i,Case tab_case[])
-{
-  for (i=0; i <70 && (tab_case[i].joueur!=0 || tab_case[i].joueur!=1);i++ )
-  {
-      printf("tab_case[%d] x : %d  y :  %d \n",i,tab_case[i].coordonnee_X,tab_case[i].coordonnee_Y  );
+void afficher_tab(int i, Case tab_case[]) {
+  for (i = 0; i < 70 && (tab_case[i].joueur != 0 || tab_case[i].joueur != 1);
+       i++) {
   }
 }
-
 
 int nb_touche(Case plateau[11][11], int y, int x)
-// Compte le nombre de case adjacente d'une case du plateau donnée
+// Compte le nombre de case adjacente de même couleur d'une case du plateau donnée
 {
   int touche = 0;
 
   if (y == 0) {
     // en haut à gauche
     if (x == 0) {
-      printf("en haut gauche\n");
-      if (plateau[y][x].joueur == plateau[y + 1][x].joueur)
-      {
-        printf("gsg %d  %d\n",y,x);
+      if (plateau[y][x].joueur == plateau[y + 1][x].joueur) {
         touche++;
-      }  
+      }
       if (plateau[y][x].joueur == plateau[y][x + 1].joueur) touche++;
-      printf("%d \n",touche);
     }
     // en haut à droite
     else if (x == 10) {
-      printf("en haut droit\n");
-      if (plateau[y][x].joueur == plateau[y][x-1].joueur) touche++;
-      if (plateau[y][x].joueur == plateau[y+1][x - 1].joueur) touche++;
-      if (plateau[y][x].joueur == plateau[y+1][x].joueur) touche++;
-      printf("%d \n",touche);
+      if (plateau[y][x].joueur == plateau[y][x - 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y + 1][x - 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y + 1][x].joueur) touche++;
     }
     // ligne du haut
     else {
-      printf("ligne haut \n");
       if (plateau[y][x].joueur == plateau[y][x - 1].joueur) touche++;
       if (plateau[y][x].joueur == plateau[y][x + 1].joueur) touche++;
       if (plateau[y][x].joueur == plateau[y + 1][x].joueur) touche++;
       if (plateau[y][x].joueur == plateau[y + 1][x - 1].joueur) touche++;
-      printf("%d \n",touche);
     }
   } else if (y == 10) {
     // en bas à gauche
     if (x == 0) {
-      printf("en bas à gauche\n");
       if (plateau[y][x].joueur == plateau[y - 1][x].joueur) touche++;
       if (plateau[y][x].joueur == plateau[y - 1][x + 1].joueur) touche++;
       if (plateau[y][x].joueur == plateau[y][x + 1].joueur) touche++;
-      printf("%d \n",touche);
     }
     // en bas à droite
     else if (x == 10) {
-      printf("en bas droite\n");
       if (plateau[y][x].joueur == plateau[y - 1][x].joueur) touche++;
-      printf("%d\n",touche);
       if (plateau[y][x].joueur == plateau[y][x - 1].joueur) touche++;
-      printf("%d \n",touche);
     }
     // ligne du bas
     else {
-      printf("ligne du bas\n");
       if (plateau[y][x].joueur == plateau[y][x - 1].joueur) touche++;
       if (plateau[y][x].joueur == plateau[y][x + 1].joueur) touche++;
       if (plateau[y][x].joueur == plateau[y - 1][x].joueur) touche++;
       if (plateau[y][x].joueur == plateau[y - 1][x + 1].joueur) touche++;
-      printf("%d \n",touche);
     }
   } else {
     // cote de gauche
     if (x == 0) {
-      printf("cote gauche\n");
-      if (plateau[y][x].joueur==plateau[y-1][x].joueur) touche++;
-      if (plateau[y][x].joueur==plateau[y-1][x+1].joueur) touche++;
-      if (plateau[y][x].joueur==plateau[y][x+1].joueur) touche++;
-      if (plateau[y][x].joueur==plateau[y+1][x].joueur) touche++;
-      printf("%d \n",touche);
+      if (plateau[y][x].joueur == plateau[y - 1][x].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y - 1][x + 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y][x + 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y + 1][x].joueur) touche++;
     }
 
     // cote de droite
     else if (x == 10) {
-      printf("cote droit\n");
-      if (plateau[y][x].joueur==plateau[y-1][x].joueur) touche++;
-      if (plateau[y][x].joueur==plateau[y][x-1].joueur) touche++;
-      if (plateau[y][x].joueur==plateau[y+1][x-1].joueur) touche++;
-      if (plateau[y][x].joueur==plateau[y+1][x].joueur) touche++;
-      printf("%d \n",touche);
+      if (plateau[y][x].joueur == plateau[y - 1][x].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y][x - 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y + 1][x - 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y + 1][x].joueur) touche++;
     }
 
     // tous les autres cas
     else {
-      printf("autre\n");
-      if (plateau[y][x].joueur==plateau[y-1][x].joueur) touche++;
-      if (plateau[y][x].joueur==plateau[y-1][x+1].joueur) touche++;
-      if (plateau[y][x].joueur==plateau[y][x+1].joueur) touche++;
-      if (plateau[y][x].joueur==plateau[y][x-1].joueur) touche++;
-      if (plateau[y][x].joueur==plateau[y+1][x].joueur) touche++;
-      if (plateau[y][x].joueur==plateau[y+1][x-1].joueur) touche++;
-      printf("%d \n",touche);
+      if (plateau[y][x].joueur == plateau[y - 1][x].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y - 1][x + 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y][x + 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y][x - 1].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y + 1][x].joueur) touche++;
+      if (plateau[y][x].joueur == plateau[y + 1][x - 1].joueur) touche++;
     }
   }
-  return touche; 
+  return touche;
 }
 
-Case trouver_case(Case plateau[11][11], int lvl_ligne, int lvl_colonne, int y,int x)  // Au premier lancement lvl_ligne = lvl_colonne = 0
+Case trouver_case(Case plateau[11][11], int lvl_ligne, int lvl_colonne, int y,int x)  
+// Au premier lancement lvl_ligne = lvl_colonne = 0
+// Cherche une case adjacente et la renvois en faisant un "cercle" autour de la case testé
 {
   Case new_case;
   new_case.coordonnee_Y = -1;
@@ -145,134 +121,99 @@ Case trouver_case(Case plateau[11][11], int lvl_ligne, int lvl_colonne, int y,in
   new_case.joueur = -1;
 
 
-  printf("------> trouver case\n");
- 
-     printf("niveau ligne : %d niveau colonne : %d \n",lvl_ligne,lvl_colonne );
 
-
-  if (lvl_ligne == 0 ) {
-    if (lvl_colonne ==  1 && !lire_tab(y-1,x,plateau))  // Le programme recherche case par case s'il y a une case adjacente
+  if (lvl_ligne == 0) {
+    if (lvl_colonne == 1 && !lire_tab(y - 1, x, plateau))  
+    // Le programme recherche case par case s'il y a une case adjacente
     {
-      // if (plateau[y][x - 1].joueur == plateau[y][x].joueur)
-      printf("test1\n");
-              if (plateau[y-1][x].joueur == plateau[y][x].joueur)
+      if (plateau[y - 1][x].joueur == plateau[y][x].joueur)
 
-        {new_case = plateau[y-1][x]; printf(" plateau[y-1][x] coordonnée : y %d x : %d joueur : %d \n",plateau[y-1][x].coordonnee_Y,plateau[y-1][x].coordonnee_X, plateau[y-1][x].joueur ); }
+      {
+        new_case = plateau[y - 1][x];
+    
+      }
     }
-    if (lvl_colonne == 2 && !lire_tab(y-1,x+1,plateau)) {
-      printf("test2\n");
-            // if (plateau[y + 1][x - 1].joueur == plateau[y][x].joueur)
-
-      if (plateau[y - 1][x + 1].joueur == plateau[y][x].joueur)
-        {new_case = plateau[y-1][x + 1]; printf(" plateau[y-1][x + 1]  coordonnée : y %d x : %d joueur : %d \n",plateau[y-1][x + 1].coordonnee_Y,plateau[y-1][x + 1].coordonnee_X, plateau[y-1][x + 1].joueur ); }
-    }
-  }
-  
-  if (lvl_ligne == 1 ) {
-    if (lvl_colonne == 0 && !lire_tab(y,x-1,plateau)) {
-      printf("test3\n");
-      // if (plateau[y - 1][x].joueur == plateau[y][x].joueur)
-      printf("comparaison joueur : case : %d joueur : %d \n",plateau[y][x-1].joueur,plateau[y][x].joueur );
-              if (plateau[y][x-1].joueur == plateau[y][x].joueur)
-
-        {new_case = plateau[y][x-1];printf(" plateau[y][x-1] coordonnée : y %d x : %d joueur : %d \n",plateau[y][x-1].coordonnee_Y,plateau[y][x-1].coordonnee_X, plateau[y][x-1].joueur );  }
-    }
-
-    if (lvl_colonne == 2 && !lire_tab(y,x+1,plateau) ) {
-      // if (plateau[y + 1][x].joueur == plateau[y][x].joueur)
-      printf("test4\n");
-              if (plateau[y][x+1].joueur == plateau[y][x].joueur)
-
-        {new_case = plateau[y][x+1];printf(" plateau[y][x+1] coordonnée : y %d x : %d joueur : %d \n",plateau[y][x+1].coordonnee_Y,plateau[y][x+1].coordonnee_X, plateau[y][x+1].joueur ); }
+    if (lvl_colonne == 2 && !lire_tab(y - 1, x + 1, plateau)) {
+      if (plateau[y - 1][x + 1].joueur == plateau[y][x].joueur) 
+        new_case = plateau[y - 1][x + 1];     
     }
   }
 
-  if (lvl_ligne == 2  ) {
-    if (lvl_colonne == 0 && !lire_tab(y+1,x-1,plateau)) {
-      // if (plateau[y - 1][x + 1].joueur == plateau[y][x].joueur)
-      printf("test5\n");
-              if (plateau[y + 1][x - 1].joueur == plateau[y][x].joueur)
-
-        {new_case = plateau[y+1][x - 1];printf(" plateau[y+1][x - 1] coordonnée : y %d x : %d joueur : %d \n",plateau[y+1][x - 1].coordonnee_Y,plateau[y+1][x-1].coordonnee_X, plateau[y+1][x-1].joueur ); }
+  if (lvl_ligne == 1) {
+    if (lvl_colonne == 0 && !lire_tab(y, x - 1, plateau)) {
+    
+      if (plateau[y][x - 1].joueur == plateau[y][x].joueur)     
+        new_case = plateau[y][x - 1];  
     }
 
-    if (lvl_colonne == 1 && !lire_tab(y+1,x,plateau)) { 
-      // if (plateau[y][x + 1].joueur == plateau[y][x].joueur)
-      printf("test6\n");
-              if (plateau[y+1][x].joueur == plateau[y][x].joueur)
-
-        {new_case = plateau[y+1][x];printf(" plateau[y+1][x] coordonnée : y %d x : %d joueur : %d \n",plateau[y+1][x].coordonnee_Y,plateau[y+1][x].coordonnee_X, plateau[y+1][x].joueur );}
+    if (lvl_colonne == 2 && !lire_tab(y, x + 1, plateau)) {
+      if (plateau[y][x + 1].joueur == plateau[y][x].joueur)    
+        new_case = plateau[y][x + 1];    
     }
   }
-  printf("new_case : y : %d x : %d borne : %d joueur %d\n",new_case.coordonnee_Y,new_case.coordonnee_X,new_case.borne,new_case.joueur );
+
+  if (lvl_ligne == 2) {
+    if (lvl_colonne == 0 && !lire_tab(y + 1, x - 1, plateau)) {     
+      if (plateau[y + 1][x - 1].joueur == plateau[y][x].joueur)    
+        new_case = plateau[y + 1][x - 1];    
+    }
+
+    if (lvl_colonne == 1 && !lire_tab(y + 1, x, plateau)) {
+      if (plateau[y + 1][x].joueur == plateau[y][x].joueur)     
+        new_case = plateau[y + 1][x];       
+    }
+  }
+ 
   return (new_case);
 }
-int k=0;
-Case parcourir_case (Case plateau[11][11], int y, int x,int borne_up,int joueur_up,int *end,int *i)
-{
+int k = 0;
+Case parcourir_case(Case plateau[11][11], int y, int x, int borne_up,int joueur_up, int *end, int *i){
 
-  
-  int lvl_ligne,lvl_colonne;
+//Parcour le plateau en commencant par le dernier pion joué.
+
+  int lvl_ligne, lvl_colonne;
   Case pion_adjacent;
   pion_adjacent.coordonnee_Y = 0;
   pion_adjacent.coordonnee_X = 0;
   pion_adjacent.borne = 0;
   pion_adjacent.joueur = -1;
-  int sortie =0;
-  printf("k : %d \n", k);
+  int sortie = 0;
 
-  int nb_case_adjacente = nb_touche(plateau,y,x);
-  printf("Nombre de case adjacente : %d \n",nb_case_adjacente );
-   
-  printf("-------> parcourir_case\n");
-  printf("valeur de i : %d \n",*i );
-  // afficher_tab(*i);
+  int nb_case_adjacente = nb_touche(plateau, y, x); 
 
-    for (lvl_ligne = 0; lvl_ligne <=2 && *end !=50 && sortie != 1 && nb_case_adjacente != 0 ; lvl_ligne++) {
 
-      for (lvl_colonne = 0; lvl_colonne <= 2 && *end != 50 && sortie != 1; lvl_colonne++) {
-      
-        pion_adjacent = trouver_case(plateau, lvl_ligne, lvl_colonne, y, x);
-        if(pion_adjacent.coordonnee_X!=-1 && pion_adjacent.coordonnee_Y!=-1 ) {tab_case[*i] = pion_adjacent; printf("tab_case[%d] = y %d  x  %d  \n",*i ,tab_case[*i].coordonnee_Y,tab_case[*i].coordonnee_X  );  *i=*i+1;}
-      
-        printf("pion_adjacent y : %d x:%d borne : %d joueur : %d \n",pion_adjacent.coordonnee_Y,pion_adjacent.coordonnee_X,pion_adjacent.borne,pion_adjacent.joueur );
-        printf("borne up : %d borne pion : %d finis : %d \n",borne_up,pion_adjacent.borne,*end );
-        if (pion_adjacent.borne==borne_up) sortie=1;
-        if (nb_touche(plateau,pion_adjacent.coordonnee_Y,pion_adjacent.coordonnee_X)>=3 && pion_adjacent.joueur!=-1) {tab_adjacente[k]=pion_adjacent;printf("tab_adjacente[%d] = y %d x %d \n",k, tab_adjacente[k].coordonnee_Y,tab_adjacente[k].coordonnee_X ); k++; }
-        if (pion_adjacent.joueur == joueur_up && pion_adjacent.borne != borne_up && *end !=50 && sortie != 1)
-          {         
-                  *end=*end+1;
-
-                  // remplir_tab();
-return(parcourir_case(plateau, pion_adjacent.coordonnee_Y,
-                              pion_adjacent.coordonnee_X,borne_up,joueur_up,end,i));}
-        
+  for (lvl_ligne = 0;lvl_ligne <= 2 && *end != 50 && sortie != 1 && nb_case_adjacente != 0;lvl_ligne++) { // On rentre dans la boucle si le pion testé 
+    for (lvl_colonne = 0; lvl_colonne <= 2 && *end != 50 && sortie != 1;lvl_colonne++) {                  // possède au moins une case adjacente, et si le 
+      pion_adjacent = trouver_case(plateau, lvl_ligne, lvl_colonne, y, x);                                // compteur n'est pas arrivé au max.
+      if (pion_adjacent.coordonnee_X != -1 &&  pion_adjacent.coordonnee_Y != -1) {
+        tab_case[*i] = pion_adjacent;                                                                     // On remplit le plateau des cases traversé.
+        *i = *i + 1;
+      }
+      if (pion_adjacent.borne == borne_up) sortie = 1;                                                    // On a trouvé la borne recherché, la fonction va se terminer.
+      if (nb_touche(plateau, pion_adjacent.coordonnee_Y,  pion_adjacent.coordonnee_X) >= 3 &&pion_adjacent.joueur != -1) {
+        tab_adjacente[k] = pion_adjacent;                                                                 // On remplit le plateau expliqué plus haut.
+        k++;
+      }
+      if (pion_adjacent.joueur == joueur_up && pion_adjacent.borne != borne_up && *end != 50 && sortie != 1) {
+        *end = *end + 1;
+        return (parcourir_case(plateau, pion_adjacent.coordonnee_Y,  pion_adjacent.coordonnee_X, borne_up, joueur_up,end, i));
       }
     }
+  }
 
-    printf("pion_adjacent y : %d x:%d borne : %d joueur : %d \n",pion_adjacent.coordonnee_Y,pion_adjacent.coordonnee_X,pion_adjacent.borne,pion_adjacent.joueur );
-    printf("k : %d , tab_adjacente[%d] joueur : %d  \n", k,k ,tab_adjacente[k].joueur );
-    if(pion_adjacent.joueur==-1 && tab_adjacente[k-1].joueur!=-1 && sortie!=1)
-    {
-      printf("Yo !\n");
-       k--;
-      return(parcourir_case(plateau,tab_adjacente[k].coordonnee_Y,tab_adjacente[k].coordonnee_X,borne_up,joueur_up,end,i));
-    }
-  
-      printf("pion_adjacent fin y : %d x:%d borne : %d joueur : %d \n",pion_adjacent.coordonnee_Y,pion_adjacent.coordonnee_X,pion_adjacent.borne,pion_adjacent.joueur );
+
+  if (pion_adjacent.joueur == -1 && tab_adjacente[k - 1].joueur != -1 && sortie != 1) {
+    k--;
+    return (parcourir_case(plateau, tab_adjacente[k].coordonnee_Y, tab_adjacente[k].coordonnee_X, borne_up, joueur_up,end, i));
+  }
 
 
   return (pion_adjacent);
-
-
 }
 
-
-
 int deplacement_plateau(Case plateau[11][11], int y, int x, int borne) {
-  // int lvl_colonne, lvl_ligne = 0;
+  //Fonction qui renvois la borne que l'on recherche
   int sortie = 1;
-
 
   Case pion_adjacent;
   pion_adjacent.coordonnee_Y = 0;
@@ -283,147 +224,117 @@ int deplacement_plateau(Case plateau[11][11], int y, int x, int borne) {
   pion_precedent.coordonnee_Y = -1;
   pion_precedent.coordonnee_X = -1;
   pion_precedent.borne = 0;
-  pion_precedent.joueur=-1;
-  // int nb_adjacent;
-  // int end = 0;
-  // int fin = 0;
+  pion_precedent.joueur = -1;
+  
   int borne_up;
-  printf("------> deplacement\n");
+
+  int joueur_up = plateau[y][x].joueur;
+  int i = 0;
+  int end = 0;
 
 
-  int joueur_up=plateau[y][x].joueur;
-  int i=0;
+  if (borne == 1) {                                                 // Le pion de départ à pour borne 1 on recherche donc un pion avec une borne
+    borne_up = 2;                                                   // de valeur 2.
 
-  if (borne ==1)
-  {
-    int end = 0;
-    borne_up = 2;
+    tab_case[0].coordonnee_Y = plateau[y][x].coordonnee_Y;
+    tab_case[0].coordonnee_X = plateau[y][x].coordonnee_X;
+    tab_case[0].joueur = plateau[y][x].joueur;
+    tab_case[0].borne = plateau[y][x].borne;
 
+    i++;
 
-        tab_case[0].coordonnee_Y=plateau[y][x].coordonnee_Y;
-        tab_case[0].coordonnee_X=plateau[y][x].coordonnee_X;
-        tab_case[0].joueur=plateau[y][x].joueur;
-        tab_case[0].borne=plateau[y][x].borne;
-
-        i++;
-
-
-        pion_adjacent=parcourir_case(plateau,plateau[y][x].coordonnee_Y ,plateau[y][x].coordonnee_X ,borne_up,joueur_up,&end,&i);
-        sortie=nb_touche(plateau, pion_adjacent.coordonnee_X,pion_adjacent.coordonnee_Y);
-     
-
-
+    pion_adjacent = parcourir_case(plateau, plateau[y][x].coordonnee_Y, plateau[y][x].coordonnee_X, borne_up,joueur_up, &end, &i);
+    sortie = nb_touche(plateau, pion_adjacent.coordonnee_X,pion_adjacent.coordonnee_Y);
   }
 
-  if (borne ==2)
-  {
+  if (borne == 2) {
     borne_up = 1;
-    int end =0;
-   
 
-        tab_case[0].coordonnee_Y=plateau[y][x].coordonnee_Y;
-        tab_case[0].coordonnee_X=plateau[y][x].coordonnee_X;
-        tab_case[0].joueur=plateau[y][x].joueur;
-        tab_case[0].borne=plateau[y][x].borne;
+    tab_case[0].coordonnee_Y = plateau[y][x].coordonnee_Y;
+    tab_case[0].coordonnee_X = plateau[y][x].coordonnee_X;
+    tab_case[0].joueur = plateau[y][x].joueur;
+    tab_case[0].borne = plateau[y][x].borne;
 
-        i++;
-       
+    i++;
 
-        pion_adjacent=parcourir_case(plateau,plateau[y][x].coordonnee_Y,plateau[y][x].coordonnee_X,borne_up,plateau[y][x].joueur,&end,&i);
-        sortie=nb_touche(plateau, pion_adjacent.coordonnee_X,pion_adjacent.coordonnee_Y);
-
-
-
-
+    pion_adjacent = parcourir_case(plateau, plateau[y][x].coordonnee_Y, plateau[y][x].coordonnee_X, borne_up,plateau[y][x].joueur, &end, &i);
+    sortie = nb_touche(plateau, pion_adjacent.coordonnee_X,pion_adjacent.coordonnee_Y);
   }
-
 
   return (pion_adjacent.borne);
 }
 
 int borne_oppose(pile *p, int joueur) {
+  //Fonction qui vérifie si il y a bien un pion de chaque côté du plateau et de la même couleur.
   int vrai = 0;
   int borne = 0;
   pile *p_aux = p;
   Cell *sommet = p->top;
   int borne_next = 0;
-  int sortie=0;
-  borne = p_aux->top->elt.borne;                
+  int sortie = 0;
+  borne = p_aux->top->elt.borne;
 
-
-  if (borne == 1)
-  {
-    while (p_aux->top->next!=NULL && borne_next!=2 && sortie == 0 )
-    {
+  if (borne == 1) {
+    while (p_aux->top->next != NULL && borne_next != 2 && sortie == 0) {
       p_aux->top = p_aux->top->next;
-      if (p_aux->top->next != NULL){
-
-        p_aux->top=p_aux->top->next;
+      if (p_aux->top->next != NULL) {
+        p_aux->top = p_aux->top->next;
         borne_next = p_aux->top->elt.borne;
-     }
-     else sortie = 1;
-     if(borne_next==2) vrai=1;
-   }
+      } else
+        sortie = 1;
+      if (borne_next == 2) vrai = 1;
+    }
   }
-  if (borne == 2)
-  {
-    while (p_aux->top->next!=NULL && borne_next!=2 && sortie == 0 )
-    {
+  if (borne == 2) {
+    while (p_aux->top->next != NULL && borne_next != 2 && sortie == 0) {
       p_aux->top = p_aux->top->next;
-      if (p_aux->top->next != NULL){
-
-        p_aux->top=p_aux->top->next;
+      if (p_aux->top->next != NULL) {
+        p_aux->top = p_aux->top->next;
         borne_next = p_aux->top->elt.borne;
-     }
-     else sortie = 1;
-     if(borne_next==1) vrai=1;
-
-   }
+      } else
+        sortie = 1;
+      if (borne_next == 1) vrai = 1;
+    }
   }
 
-p->top=sommet;
+  p->top = sommet;
 
-return (vrai);
-
+  return (vrai);
 }
 
 
+
 int victoire(int joueur, pile *p, Case plateau[11][11]) {
+  // Appelle toute les autres fonctions, et renvois un int pour définir si on continue ou on arrête la partie.
   int fin = 0;
 
   int borne_op;
   remplir_tab(tab_case);
   remplir_tab(tab_adjacente);
 
-  
-
-  // if (p->top->elt.borne == 0)  { 
-  //   printf("continue jeux\n"); 
-  //   return (fin); }
-
 
   fin = borne_oppose(p, joueur);
-  if (!fin)
-     return (fin);
 
-  else {
-    fin =0;
+  if (!fin)
+    return (fin);
+
+
+
+  else if (p->top->elt.borne!=0) {
+    fin = 0;
 
     int borne = p->top->elt.borne;
-    int x = p->top->elt.coordonnee_x;    
+    int x = p->top->elt.coordonnee_x;
     int y = p->top->elt.coordonnee_y;
-
-    printf("Coordonnée début&joueur   :   y: %d   x : %d joueur : %d  borne : %d  \n", plateau[y][x].coordonnee_Y,plateau[y][x].coordonnee_X,plateau[y][x].joueur,plateau[y][x].borne ); 
 
 
     borne_op = deplacement_plateau(plateau, y, x, borne);
-    printf("deplacement_plateau finis\n");
 
-    if (borne == 1 && borne_op == 2) fin = 1; 
+    if (borne == 1 && borne_op == 2) fin = 1;
 
-    if (borne == 2 && borne_op == 1) fin = 1; 
+    if (borne == 2 && borne_op == 1) fin = 1;
   }
-  printf("fin du jeu : %d\n",fin );
 
+ 
   return (fin);
 }

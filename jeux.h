@@ -20,9 +20,9 @@ void remplir(int Y,int X,int joueur,Case plateau[11][11] );
 int plein(int Y,int X,Case  plateau[11][11] );
 int plateau_plein (Case plateau[11][11]);
 
-int verif_borne(int y, int x,int couleur);					// Vérifie si un coup joué est sur une borne
+int verif_borne(int y, int x,int couleur);	
 
-element Conversion_elt (int Y,int X,int couleur) ;		// Met les coordonnée dans la structure element
+element Conversion_elt (int Y,int X,int couleur) ;
 void enregistre_coup(pile *p,int Y,int X,int couleur);
 
 int choix_joueur();

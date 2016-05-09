@@ -29,8 +29,6 @@ int deplacement_plateau(Case plateau[11][11] ,int y,int x,int borne);
 int borne_oppose(pile *p,int joueur);
 int victoire(int joueur,pile *p,Case plateau[11][11]);
 
-
-
 #endif
 
 

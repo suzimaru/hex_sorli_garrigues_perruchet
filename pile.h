@@ -24,7 +24,6 @@ typedef struct pile_s
 	Cell *top;
 } pile;
 
-
 void init(pile *p);
 bool estVide (pile *p);
 bool pile_Pleine (pile *p);

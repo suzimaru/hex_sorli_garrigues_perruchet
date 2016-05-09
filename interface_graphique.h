@@ -15,12 +15,11 @@
 #include "victoire.h"
 #include "pile.h"
 #include "Sauvegarde_histo.h"
-//#include "Sauvegarde_histo.h"
 
-  // sudo apt-get install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-ttf2.0-dev
+// sudo apt-get install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-ttf2.0-dev
 
-#define WINHI 600 // window height
-#define WINWI 800 // window width
+#define WINHI 600
+#define WINWI 800
 
 typedef struct { int h, w; } Dimensions;
 
@@ -38,10 +37,8 @@ SDL_Rect position_fond, posTexte1, posTexte_menu, posTexte_auteur, posJouer,
     posUndo, pos_enum_save, posSauvegarder, pos_info_joueur, pos_info_coup, pos_cacheur, pos_info_pion,
     pos_cacheur2, pos_victoire, pos_abandon;
 
-Dimensions fenetre; // main window
+Dimensions fenetre;
 
-int souris_Dessus(Clic c, int menu, int borneInfX, int borneInfY, int borneSupX,
-                  int borneSupY);
 int clic_Valide(Clic c, int borneInfX, int borneInfY, int borneSupX,
                 int borneSupY);
 void affichage();
